@@ -1,0 +1,3604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#fdf3ea" />
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS2luLU5lY3QiLCJzaG9ydF9uYW1lIjoiS2luLU5lY3QiLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZGYzZWEiLCJ0aGVtZV9jb2xvciI6IiNmMjcwNGEifQ==" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@600;700&display=swap" rel="stylesheet" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>Kin·Nect</title>
+<style>
+  :root{
+    --surface-1:#fffdfa;
+    --surface-2:#fbe9d8;
+    --page-plane:#fdf3ea;
+    --ink-1:#3a2b22;
+    --ink-2:#6b5548;
+    --ink-muted:#9c8577;
+    --gridline:#f2ddc7;
+    --border:rgba(58,43,34,0.08);
+
+    --blue:#f2704a;
+    --blue-deep:#d9522c;
+    --blue-soft:#fde7dc;
+    --aqua:#f2a93b;
+    --aqua-deep:#d68a1f;
+    --violet:#e0708a;
+
+    --good:#4c9a6a;
+    --warning:#d3860a;
+    --critical:#e2574a;
+
+    --good-bg:#eaf5ec;
+    --warning-bg:#fdf1dc;
+    --critical-bg:#fdeae6;
+
+    --shadow-xs: 0 1px 2px rgba(58,43,34,0.06);
+    --shadow-sm: 0 3px 10px rgba(58,43,34,0.07), 0 1px 3px rgba(58,43,34,0.05);
+    --shadow-md: 0 10px 26px rgba(58,43,34,0.10), 0 3px 8px rgba(58,43,34,0.05);
+    --shadow-lg: 0 18px 44px rgba(58,43,34,0.16), 0 5px 12px rgba(58,43,34,0.07);
+
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  :root[data-theme="dark"]{
+    --surface-1:#241a14;
+    --surface-2:#2e2019;
+    --page-plane:#170f0b;
+    --ink-1:#f7ede4;
+    --ink-2:#dcc7b8;
+    --ink-muted:#a68b78;
+    --gridline:#3a2a20;
+    --border:rgba(255,240,230,0.10);
+    --blue-soft:#3a2416;
+    --good-bg:#16311f;
+    --warning-bg:#392c11;
+    --critical-bg:#3a1a1a;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.4);
+    --shadow-md: 0 10px 28px rgba(0,0,0,0.5);
+    --shadow-lg: 0 20px 48px rgba(0,0,0,0.55);
+  }
+  :root[data-theme="dark"] .edit-row input,
+  :root[data-theme="dark"] .age-option{
+    background:var(--surface-2);
+    color:var(--ink-1);
+  }
+  :root[data-theme="dark"] .doc-card{
+    background:#26210f;
+    color:#e7d9ad;
+  }
+  :root[data-theme="dark"] .doc-card .label{ color:#c9ac68; }
+  :root[data-theme="dark"] .doc-card mark{ background:#5c4a17; color:#ffe8a3; }
+  :root[data-theme="dark"] .thumb:not(.has-photo){ background:var(--surface-2); }
+  :root[data-theme="dark"] .thumb.bottle:not(.has-photo){ background:#182238; }
+  :root[data-theme="dark"] .thumb.discharge:not(.has-photo){ background:#1f2a20; }
+  :root[data-theme="dark"] .thumb.otc:not(.has-photo){ background:#332215; }
+  :root[data-theme="dark"] .appt-date{ background:var(--blue-soft); }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  html{ height:100%; }
+  body{
+    font-family: "Nunito", -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--page-plane);
+    color: var(--ink-1);
+    height:100%;
+    overflow:hidden;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+    line-height:1.4;
+  }
+
+  #app{
+    position:fixed;
+    top:0; left:0; right:0; bottom:0;
+    display:flex;
+    flex-direction:column;
+    background:var(--surface-1);
+    max-width:560px;
+    margin:0 auto;
+    box-shadow:0 0 60px rgba(0,0,0,0.08);
+  }
+
+  .app-header{
+    flex:0 0 auto;
+    padding: calc(var(--safe-top) + 14px) 20px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:color-mix(in srgb, var(--surface-1) 88%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: 0 1px 0 var(--border);
+    position:relative;
+    z-index:2;
+  }
+  .brand{
+    display:flex; align-items:center; gap:9px;
+    font-family:"Quicksand", "Nunito", sans-serif;
+    font-weight:700; font-size:19px; color:var(--ink-1);
+    letter-spacing:-0.01em;
+  }
+  .brand svg{ width:24px; height:24px; }
+  .header-right{
+    display:flex; align-items:center; gap:10px;
+  }
+  .avatar-mini{
+    width:30px; height:30px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:800; color:#fff;
+    background:linear-gradient(145deg, var(--blue), var(--blue-deep));
+    box-shadow: var(--shadow-xs);
+  }
+  .theme-header-btn{
+    width:34px; height:34px; border-radius:50%;
+    border:none; background:var(--surface-2);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; padding:0; flex:0 0 auto;
+    box-shadow: var(--shadow-xs);
+    transition: transform .12s ease;
+  }
+  .theme-header-btn:active{ transform:scale(0.9); }
+  .theme-header-btn svg{ width:17px; height:17px; }
+
+  .app-body{
+    flex:1 1 auto;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:0 20px 24px;
+    -webkit-user-select:text;
+    user-select:text;
+    background:var(--page-plane);
+  }
+  .app-body::-webkit-scrollbar{ width:0; }
+
+  .bottomnav{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+    background:color-mix(in srgb, var(--surface-1) 90%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: 0 -1px 0 var(--border);
+    padding: 9px 4px calc(var(--safe-bottom) + 9px);
+    position:relative;
+    z-index:2;
+  }
+  .bottomnav .navitem{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    font-size:11.5px; color:var(--ink-muted); font-weight:600;
+    background:none; border:none; cursor:pointer;
+    padding:6px 10px; border-radius:12px;
+    flex:1;
+    transition: color .15s ease, transform .12s ease;
+  }
+  .bottomnav .navitem:active{ transform:scale(0.92); }
+  .bottomnav .navitem.active{ color:var(--blue); }
+  .bottomnav .navitem svg{ width:22px; height:22px; }
+
+  h2.screen-title{
+    font-size:22px;
+    font-weight:800;
+    margin:18px 0 5px;
+    letter-spacing:-0.02em;
+  }
+  p.screen-sub{
+    margin:0 0 20px;
+    color:var(--ink-2);
+    font-size:14.5px;
+    line-height:1.5;
+  }
+
+  /* ---- Upload screen ---- */
+  .upload-actions{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+  .scan-card{
+    min-width:0;
+    display:flex; flex-direction:column; align-items:center; gap:9px;
+    background:var(--surface-1);
+    border:none;
+    border-radius:20px;
+    padding:18px 6px 15px;
+    cursor:pointer;
+    text-align:center;
+    font-family:inherit;
+    transition: transform .15s cubic-bezier(.2,.8,.2,1), box-shadow .15s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .scan-card:active{ transform:scale(0.95) translateY(1px); box-shadow: var(--shadow-xs); }
+  .scan-card .icon-badge{
+    width:46px; height:46px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    flex:0 0 auto;
+  }
+  .scan-card.bottle .icon-badge{ background:linear-gradient(150deg,#eaf1fb,#dbe9fb); }
+  .scan-card.discharge .icon-badge{ background:linear-gradient(150deg,#e3f5ec,#d3f0e3); }
+  .scan-card.otc .icon-badge{ background:linear-gradient(150deg,#fdece0,#fbe0cb); }
+  .scan-card.list .icon-badge{ background:linear-gradient(150deg,#efe8fb,#e2d6f7); }
+  :root[data-theme="dark"] .scan-card.bottle .icon-badge{ background:linear-gradient(150deg,#182238,#1c2c48); }
+  :root[data-theme="dark"] .scan-card.discharge .icon-badge{ background:linear-gradient(150deg,#152a1f,#183a28); }
+  :root[data-theme="dark"] .scan-card.otc .icon-badge{ background:linear-gradient(150deg,#332215,#402a18); }
+  :root[data-theme="dark"] .scan-card.list .icon-badge{ background:linear-gradient(150deg,#241c38,#2d2248); }
+  .scan-card .scan-label{ font-size:13px; font-weight:800; color:var(--ink-1); line-height:1.25; }
+  .scan-card .scan-sub{ font-size:11.5px; color:var(--ink-muted); font-weight:600; letter-spacing:.01em; }
+
+  .thumb-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .thumb{
+    aspect-ratio:3/4;
+    border-radius:16px;
+    background:var(--surface-2);
+    border:none;
+    box-shadow: var(--shadow-xs);
+    display:flex;
+    align-items:flex-end;
+    padding:7px;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--ink-muted);
+    position:relative;
+  }
+  .thumb.add{
+    align-items:center;
+    justify-content:center;
+    color:var(--blue);
+    font-size:26px;
+    font-weight:300;
+    box-shadow:none;
+    background:var(--surface-2);
+    border:1.5px dashed var(--gridline);
+    cursor:pointer;
+  }
+  .thumb .pagebadge{
+    position:absolute; top:7px; right:7px;
+    background:rgba(255,255,255,0.9);
+    border-radius:8px;
+    padding:2px 6px;
+    font-size:11px;
+    box-shadow: var(--shadow-xs);
+  }
+  .thumb.bottle{ background:linear-gradient(155deg,#eaf1fb,#dbe9fb); }
+  .thumb.discharge{ background:linear-gradient(155deg,#f4efe3,#ece2c9); }
+  .thumb.otc{ background:linear-gradient(155deg,#fdece0,#fbe0cb); }
+  .thumb.has-photo{
+    background-size:cover;
+    background-position:center;
+  }
+  .thumb.has-photo .typelabel{
+    background:rgba(0,0,0,0.6);
+    color:#fff;
+    padding:3px 6px;
+    border-radius:7px;
+    align-self:flex-start;
+  }
+  .thumb .typeicon{
+    position:absolute; top:7px; left:7px;
+    font-size:14px;
+    background:rgba(255,255,255,0.9);
+    border-radius:8px;
+    padding:2px 6px;
+    box-shadow: var(--shadow-xs);
+  }
+  .thumb .typelabel{
+    font-size:11px;
+    font-weight:700;
+    color:var(--ink-2);
+  }
+  .thumb .removeb{
+    position:absolute; bottom:7px; right:7px;
+    background:rgba(255,255,255,0.95);
+    border-radius:8px;
+    padding:1px 6px;
+    font-size:12px;
+    color:var(--critical);
+    cursor:pointer;
+    box-shadow: var(--shadow-xs);
+  }
+  .upload-hint{
+    font-size:12.5px;
+    color:var(--ink-muted);
+    margin:-10px 0 18px;
+    line-height:1.45;
+  }
+
+  .cta-bar{
+    flex:0 0 auto;
+    padding:12px 20px calc(var(--safe-bottom) + 12px);
+    background:color-mix(in srgb, var(--surface-1) 90%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 -1px 0 var(--border);
+  }
+  .cta-btn{
+    width:100%;
+    background:linear-gradient(135deg, var(--blue), var(--blue-deep));
+    color:#fff;
+    border:none;
+    border-radius:18px;
+    padding:16px;
+    font-size:15.5px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(61,127,230,0.35);
+    transition: transform .12s ease, box-shadow .12s ease;
+    letter-spacing:-0.01em;
+  }
+  .cta-btn:active{ transform:scale(0.98); }
+  .cta-btn:disabled{ opacity:.45; cursor:default; box-shadow:none; }
+  .cta-btn.ghost{
+    background:var(--surface-2);
+    color:var(--blue);
+    box-shadow:none;
+    border:none;
+  }
+  .cta-btn.static{ position:static; width:100%; }
+
+  /* ---- Parsing screen ---- */
+  .parse-wrap{
+    display:flex; flex-direction:column; align-items:center;
+    padding-top:34px;
+  }
+  .ring{
+    width:128px; height:128px;
+    border-radius:50%;
+    background:conic-gradient(var(--blue) calc(var(--pct,0)*1%), var(--gridline) 0);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:24px;
+    transition:background 0.3s;
+    box-shadow: var(--shadow-sm);
+  }
+  .ring-inner{
+    width:102px; height:102px;
+    border-radius:50%;
+    background:var(--surface-1);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:21px;
+  }
+  .steplist{ width:100%; }
+  .step{
+    display:flex; align-items:center; gap:11px;
+    padding:11px 0;
+    font-size:14px;
+    color:var(--ink-muted);
+    font-weight:600;
+  }
+  .step .dot{
+    width:22px; height:22px; border-radius:50%;
+    border:2px solid var(--gridline);
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .step.done{ color:var(--ink-1); }
+  .step.done .dot{ background:var(--good); border-color:var(--good); }
+  .step.active .dot{ border-color:var(--blue); box-shadow:0 0 0 4px var(--blue-soft); }
+  .step.done .dot::after{ content:"✓"; color:#fff; font-size:12px; font-weight:900; }
+
+  /* ---- Verification screen ---- */
+  .verify-progress{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:10px;
+    font-size:13px; font-weight:700; color:var(--ink-muted);
+  }
+  .bar-track{
+    height:6px; background:var(--gridline); border-radius:4px;
+    overflow:hidden; margin-bottom:18px;
+  }
+  .bar-fill{ height:100%; background:linear-gradient(90deg, var(--blue), var(--aqua)); border-radius:4px; transition:width .3s; }
+
+  .doc-card{
+    background:#f6f0e2;
+    border:none;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:14px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size:13px;
+    line-height:1.6;
+    color:#4a4633;
+    box-shadow: var(--shadow-sm);
+  }
+  .doc-card .label{
+    font-family:system-ui,sans-serif;
+    font-size:11.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:#8a7f5c; font-weight:700; margin-bottom:7px; display:block;
+  }
+  .doc-card mark{
+    background:#ffe8a3;
+    padding:0 3px;
+    border-radius:4px;
+  }
+
+  .extract-card{
+    background:var(--surface-1);
+    border:none;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .extract-card .label{
+    font-size:11.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-muted); font-weight:700; margin-bottom:9px; display:flex;
+    align-items:center; justify-content:space-between;
+  }
+  .confbadge{
+    font-size:11.5px; font-weight:700; border-radius:999px; padding:3px 9px;
+    text-transform:none; letter-spacing:0;
+  }
+  .confbadge.high{ background:var(--good-bg); color:var(--good); }
+  .confbadge.low{ background:var(--warning-bg); color:var(--warning); }
+
+  .field-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:8px 0;
+    border-bottom:1px solid var(--gridline);
+    font-size:14px;
+    gap:12px;
+  }
+  .field-row:last-child{ border-bottom:none; }
+  .field-row .k{ color:var(--ink-muted); font-weight:600; flex-shrink:0; }
+  .field-row .v{ font-weight:700; text-align:right; min-width:0; word-break:break-word; overflow-wrap:anywhere; }
+
+  .verify-actions{ display:flex; gap:10px; margin-bottom:8px; }
+  .btn-confirm{
+    flex:1.4; background:linear-gradient(135deg, var(--good), var(--aqua-deep)); color:#fff; border:none;
+    border-radius:14px; padding:15px; font-weight:700; font-size:14px; cursor:pointer;
+    box-shadow: 0 6px 16px rgba(26,162,94,0.3);
+    transition: transform .12s ease;
+  }
+  .btn-confirm:active{ transform:scale(0.98); }
+  .btn-confirm:disabled{ opacity:.4; cursor:default; box-shadow:none; }
+  .btn-edit{
+    flex:1; background:var(--warning-bg); color:var(--warning); border:none;
+    border-radius:14px; padding:15px; font-weight:700; font-size:14px; cursor:pointer;
+  }
+
+  /* ---- Age-range verification (OTC medicines with more than one dosing group) ---- */
+  .age-hint{ font-size:13px; color:var(--ink-muted); margin:0 0 10px; line-height:1.4; }
+  .age-options{ display:flex; flex-direction:column; gap:8px; }
+  .age-option{
+    display:flex; flex-direction:column; align-items:flex-start; gap:4px;
+    width:100%; text-align:left; box-sizing:border-box;
+    border:none; background:var(--surface-2);
+    border-radius:14px; padding:12px 14px;
+    font-size:13.5px; font-weight:600; color:var(--ink-1);
+    cursor:pointer;
+    transition: background .12s ease, box-shadow .12s ease;
+  }
+  /* Dose text is often long and unpredictable coming from a real scan — let
+     it wrap onto its own lines under the age range rather than forcing a
+     single row and overflowing off the edge of the screen. */
+  .age-option .age-dose{
+    font-weight:700; color:var(--blue-deep);
+    white-space:normal; word-break:break-word; overflow-wrap:anywhere;
+    font-size:12.5px; line-height:1.4;
+  }
+  .age-option.selected{ background:var(--blue-soft); box-shadow: inset 0 0 0 1.5px var(--blue); }
+  :root[data-theme="dark"] .age-option.selected .age-dose{ color:#9dc4f9; }
+  .age-option.custom-option{ background:transparent; box-shadow: inset 0 0 0 1.5px var(--gridline); }
+  .age-option.custom-option .age-dose{ color:var(--ink-muted); font-weight:600; }
+
+  /* ---- Collapsed raw-scan text (shown once brackets/highlights are parsed) ---- */
+  .raw-scan-toggle summary{
+    cursor:pointer; font-family:system-ui,sans-serif; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.06em; color:#8a7f5c; font-weight:700;
+    list-style:none;
+  }
+  .raw-scan-toggle summary::-webkit-details-marker{ display:none; }
+  .raw-scan-toggle summary::before{ content:'▸ '; }
+  .raw-scan-toggle[open] summary::before{ content:'▾ '; }
+  .raw-scan-toggle .field-row{ border-bottom:1px solid rgba(0,0,0,0.08); }
+  .raw-scan-toggle .field-row:last-child{ border-bottom:none; }
+  .raw-scan-toggle .field-row .v{ text-align:left; font-weight:400; }
+  .raw-scan-toggle{ margin-top:2px; }
+  .raw-scan-toggle .field-row{ padding:10px 0 0; flex-direction:column; align-items:flex-start; gap:4px; }
+
+  /* ---- Edit modal ---- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,10,14,0.55);
+    backdrop-filter: blur(2px);
+    display:flex; align-items:flex-end; justify-content:center;
+    z-index:50;
+  }
+  .modal-sheet{
+    background:var(--surface-1);
+    width:100%; max-width:560px;
+    border-radius:24px 24px 0 0;
+    padding:20px 20px calc(var(--safe-bottom) + 20px);
+    max-height:80vh;
+    overflow-y:auto;
+    box-shadow: var(--shadow-lg);
+  }
+  .modal-sheet h3{ margin:0 0 5px; font-size:18px; font-weight:800; letter-spacing:-0.01em; }
+  .modal-sheet p{ margin:0 0 16px; font-size:13px; color:var(--ink-muted); }
+  .edit-row{ margin-bottom:12px; }
+  .edit-row label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink-muted); margin-bottom:5px; text-transform:uppercase; letter-spacing:.03em; }
+  .edit-row input{
+    width:100%; border:none; border-radius:12px;
+    padding:12px 14px; font-size:14px; font-family:inherit; color:var(--ink-1);
+    background:var(--surface-2);
+  }
+  .edit-row input:focus, .edit-row select:focus{ outline:none; box-shadow: inset 0 0 0 1.5px var(--blue); }
+  .edit-row select, .fam-select{
+    width:100%; border:none; border-radius:12px;
+    padding:12px 14px; font-size:14px; font-family:inherit; color:var(--ink-1);
+    background:var(--surface-2); appearance:none;
+  }
+  .edit-row-label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink-muted); margin-bottom:7px; text-transform:uppercase; letter-spacing:.03em; }
+  .time-chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+  .time-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--surface-2); color:var(--ink-1); font-weight:700; font-size:13px;
+    padding:7px 8px 7px 12px; border-radius:20px;
+  }
+  .time-chip .chip-x{ cursor:pointer; color:var(--ink-muted); font-size:13px; padding:2px 4px; }
+  .chip-empty{ font-size:13px; color:var(--ink-muted); }
+  .time-add-row{ display:flex; gap:8px; margin-bottom:4px; }
+  .time-add-row input[type="time"]{
+    flex:1; border:none; border-radius:12px; padding:10px 12px; font-size:14px;
+    font-family:inherit; color:var(--ink-1); background:var(--surface-2);
+  }
+  .btn-small{
+    border:none; border-radius:12px; padding:10px 14px; font-weight:700; font-size:13px; cursor:pointer;
+    background:var(--surface-2); color:var(--blue);
+  }
+  .day-toggle-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .day-toggle{
+    border:none; border-radius:10px; padding:8px 11px; font-weight:700; font-size:12.5px; cursor:pointer;
+    background:var(--surface-2); color:var(--ink-2);
+  }
+  .day-toggle.active{ background:linear-gradient(135deg, var(--blue), var(--blue-deep)); color:#fff; }
+  .duration-row{ display:flex; flex-direction:column; gap:6px; font-size:13.5px; color:var(--ink-1); margin-bottom:8px; }
+  .duration-row label{ display:flex; align-items:center; gap:8px; }
+  .duration-fixed-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:13.5px; color:var(--ink-1); margin-bottom:6px; }
+  .duration-fixed-row input[type="date"], .duration-fixed-row input[type="number"]{
+    border:none; border-radius:10px; padding:8px 10px; font-size:13.5px; font-family:inherit;
+    color:var(--ink-1); background:var(--surface-2);
+  }
+  .duration-fixed-row input[type="number"]{ width:60px; }
+  .modal-actions{ display:flex; gap:10px; margin-top:6px; }
+  .modal-actions button{
+    flex:1; border:none; border-radius:14px; padding:14px; font-weight:700; font-size:14px; cursor:pointer;
+    transition: transform .12s ease;
+  }
+  .modal-actions button:active{ transform:scale(0.97); }
+  .btn-modal-cancel{ background:var(--surface-2); color:var(--ink-2); }
+  .btn-modal-save{ background:linear-gradient(135deg, var(--blue), var(--blue-deep)); color:#fff; box-shadow:0 6px 16px rgba(61,127,230,0.3); }
+
+  /* ---- Take Photo / Choose from Files chooser ---- */
+  .source-choices{ display:flex; flex-direction:column; gap:10px; }
+  .source-choices button{
+    width:100%; border:none; border-radius:14px; padding:15px; font-weight:700; font-size:14.5px; cursor:pointer;
+    transition: transform .12s ease;
+  }
+  .source-choices button:active{ transform:scale(0.97); }
+  .btn-modal-text{ background:transparent; color:var(--ink-muted); font-weight:600; }
+  .choice-btn{
+    display:block; width:100%; text-align:left; border:none; border-radius:14px;
+    padding:14px 16px; margin-bottom:8px; font-size:14px; font-weight:700; cursor:pointer;
+    background:var(--surface-2); color:var(--ink-1); font-family:inherit;
+  }
+  .choice-btn:active{ transform:scale(0.98); }
+  .choice-btn.danger{ color:var(--critical); }
+
+  /* ---- Capture review (after camera returns a photo) ---- */
+  .capture-preview{
+    width:100%;
+    max-height:52vh;
+    border-radius:16px;
+    object-fit:cover;
+    margin-bottom:14px;
+    background:#111;
+    display:block;
+    box-shadow: var(--shadow-sm);
+  }
+  .capture-typepill{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--surface-2); color:var(--ink-2);
+    font-size:12.5px; font-weight:700;
+    border-radius:999px; padding:6px 13px;
+    margin-bottom:12px;
+  }
+
+  /* ---- Dashboard screen ---- */
+  .fam-row{ display:flex; align-items:center; gap:8px; margin-bottom:18px; }
+  .avatar{
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:800; color:#fff;
+    border:2.5px solid var(--surface-1);
+    margin-left:-11px;
+    box-shadow: var(--shadow-xs);
+  }
+  .fam-row .avatar:first-child{ margin-left:0; }
+  .fam-label{ font-size:13px; color:var(--ink-muted); font-weight:600; margin-left:6px; }
+
+  .person-filter-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+  .person-tab{
+    border:none; border-radius:20px; padding:7px 14px; font-weight:700; font-size:12.5px; cursor:pointer;
+    background:var(--surface-1); color:var(--ink-2); box-shadow: var(--shadow-xs);
+  }
+  .person-tab.active{ background:linear-gradient(135deg, var(--blue), var(--blue-deep)); color:#fff; }
+  .mini-avatar{
+    width:22px; height:22px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10.5px; font-weight:800; color:#fff; margin:0 6px;
+  }
+
+  .stat-row{ display:flex; gap:12px; margin-bottom:26px; }
+  .stat-tile{
+    flex:1; background:var(--surface-1); border:none;
+    border-radius:20px; padding:16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-tile .num{ font-family:"Quicksand","Nunito",sans-serif; font-size:26px; font-weight:700; line-height:1; letter-spacing:-0.02em; }
+  .stat-tile .lbl{ font-size:12px; color:var(--ink-muted); font-weight:600; margin-top:6px; }
+
+  .section-h{
+    font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--ink-muted); margin:26px 0 12px;
+  }
+
+  .med-item{
+    display:flex; align-items:center; gap:13px;
+    background:var(--surface-1); border:none;
+    border-radius:20px; padding:16px 17px; margin-bottom:11px;
+    box-shadow: var(--shadow-xs);
+  }
+  .checkbox{
+    width:24px; height:24px; border-radius:50%;
+    border:2px solid var(--gridline);
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .checkbox.checked{ background:var(--good); border-color:var(--good); color:#fff; font-size:12.5px; font-weight:900; }
+  .med-info{ flex:1; }
+  .med-name{ font-weight:700; font-size:14px; }
+  .med-sub{ font-size:12.5px; color:var(--ink-muted); }
+  .status-chip{
+    font-size:11.5px; font-weight:700; border-radius:999px; padding:4px 10px;
+    white-space:nowrap;
+  }
+  .status-chip.taken{ background:var(--good-bg); color:var(--good); }
+  .status-chip.due{ background:var(--warning-bg); color:var(--warning); }
+  .status-chip.overdue{ background:var(--critical-bg); color:var(--critical); }
+
+  .appt-card{
+    background:var(--surface-1); border:none;
+    border-radius:20px; padding:16px 17px; margin-bottom:11px;
+    display:flex; gap:14px; align-items:center;
+    box-shadow: var(--shadow-xs);
+  }
+  .appt-date{
+    width:50px; text-align:center; flex:0 0 auto;
+    background:var(--blue-soft); border-radius:14px; padding:8px 0;
+  }
+  .appt-date .d{ font-size:18px; font-weight:800; color:var(--blue-deep); line-height:1; }
+  .appt-date .m{ font-size:11px; font-weight:700; color:var(--blue-deep); text-transform:uppercase; }
+  .appt-info .who{ font-weight:700; font-size:13.5px; }
+  .appt-info .what{ font-size:12.5px; color:var(--ink-muted); }
+
+  .alert-box{
+    background:var(--good-bg); border:none; border-radius:16px;
+    padding:14px; margin-top:18px; font-size:13px; color:#155c3b; line-height:1.5;
+  }
+  :root[data-theme="dark"] .alert-box{ color:#8fe0b6; }
+
+  .instr-card{
+    background:var(--surface-1); border:none;
+    border-radius:20px; padding:16px 17px; margin-bottom:11px;
+    box-shadow: var(--shadow-xs);
+  }
+  .instr-card .instr-head{
+    display:flex; align-items:center; gap:8px;
+    font-weight:700; font-size:13.5px; margin-bottom:7px;
+  }
+  .upload-hero{ display:block; width:100%; max-width:280px; height:auto; margin:8px auto 20px; }
+  .today-date{ font-size:13px; color:var(--ink-muted); font-weight:700; margin:0 0 14px; }
+  .day-nav{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--surface-1); border-radius:18px; padding:9px 10px;
+    margin:0 0 12px; box-shadow: var(--shadow-xs);
+  }
+  .day-nav-arrow{
+    width:34px; height:34px; border-radius:50%; border:none; flex:0 0 auto;
+    background:var(--surface-2); color:var(--ink-1); font-size:18px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition: transform .12s ease;
+  }
+  .day-nav-arrow:active{ transform:scale(0.9); }
+  .day-nav-center{ flex:1; text-align:center; min-width:0; }
+  .day-nav-date{ font-size:13.5px; font-weight:800; color:var(--ink-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .day-nav-todaytag{
+    display:inline-block; margin-left:7px; padding:2px 8px; border-radius:999px;
+    background:var(--blue-soft); color:var(--blue-deep); font-size:10px; font-weight:800;
+    text-transform:uppercase; letter-spacing:.03em; vertical-align:middle;
+  }
+  :root[data-theme="dark"] .day-nav-todaytag{ color:#f7ede4; }
+  .day-nav-today-link{
+    display:block; margin:2px auto 0; background:none; border:none; padding:2px 0;
+    color:var(--blue); font-size:11.5px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  .course-badge{
+    display:inline-block; margin-left:7px; padding:2px 8px; border-radius:999px;
+    background:var(--surface-2); color:var(--ink-muted); font-size:11px; font-weight:700;
+    vertical-align:middle;
+  }
+  .delete-btn{
+    background:none; border:none; cursor:pointer;
+    width:30px; height:30px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex:0 0 auto; padding:0; margin-left:auto;
+    color:var(--ink-muted);
+    transition: background .12s ease, color .12s ease;
+  }
+  .delete-btn:active{ background:var(--critical-bg); color:var(--critical); }
+  .delete-btn svg{ width:16px; height:16px; }
+  .instr-card .instr-head .icon{ font-size:15px; }
+  .instr-card .instr-row{
+    display:flex; justify-content:space-between; gap:10px;
+    font-size:13px; padding:4px 0; color:var(--ink-2);
+  }
+  .instr-card .instr-row .k{ color:var(--ink-muted); font-weight:600; }
+  .instr-card .instr-row .v{ font-weight:700; text-align:right; }
+
+  .empty-state{ text-align:center; padding-top:60px; }
+  .empty-state .emoji{ font-size:44px; margin-bottom:10px; }
+
+  .toast{
+    position:fixed;
+    left:50%; bottom:26px;
+    transform:translateX(-50%) translateY(10px);
+    background:rgba(20,20,24,0.92);
+    backdrop-filter: blur(8px);
+    color:#fff;
+    padding:11px 18px; border-radius:999px;
+    font-size:13px; font-weight:600;
+    opacity:0; pointer-events:none;
+    transition:opacity .25s, transform .25s;
+    z-index:60;
+    white-space:nowrap;
+    max-width:88vw;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    box-shadow: var(--shadow-md);
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ---- Dark mode toggle (Settings screen) ---- */
+  .theme-toggle-row{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:13px; color:var(--ink-2); font-weight:600;
+  }
+  .theme-switch{
+    width:48px; height:28px; border-radius:999px; border:none;
+    background:var(--gridline);
+    position:relative; cursor:pointer; padding:0;
+    transition:background .2s; flex:0 0 auto;
+  }
+  .theme-switch .knob{
+    position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%;
+    background:#fff; transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,0.3);
+  }
+  .theme-switch.on{ background:linear-gradient(135deg, var(--blue), var(--blue-deep)); }
+  .theme-switch.on .knob{ left:23px; }
+</style>
+</head>
+<body>
+
+  <div id="app"></div>
+  <div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
+<script>
+// ============================================================
+// Kin-Nect — real single-page app shell (mobile-first).
+// Same demo logic as the earlier clickable prototype, now
+// running full-screen the way it would on an actual phone,
+// with real navigation (no phone-frame mockup, no tab strip).
+// ============================================================
+
+// Bump this string on every build. Visible in Settings so we can confirm
+// whether a device is actually loading the latest deployed code, or a
+// stale cached copy (very common right after a GitHub Pages update).
+window.KINNECT_BUILD = "2026-09-04-r31-edit-confirm-all-doses";
+
+const NAV_ICONS = {
+  dashboard: '<circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M10.5 12h3" stroke-width="1.8" stroke-linecap="round" fill="none"/>',
+  upload: '<path d="M12 4v11M12 4l-4 4M12 4l4 4" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 15v3a2 2 0 002 2h10a2 2 0 002-2v-3" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
+  family: '<circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.4"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M15.5 14.2c2.2.4 3.9 2.1 3.9 4.8" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
+  settings: '<circle cx="12" cy="12" r="3" stroke-width="1.8" fill="none"/><path d="M12 4v2.2M12 17.8V20M4 12h2.2M17.8 12H20M6.3 6.3l1.5 1.5M16.2 16.2l1.5 1.5M6.3 17.7l1.5-1.5M16.2 7.8l1.5-1.5" stroke-width="1.6" stroke-linecap="round"/>'
+};
+
+let toastTimer = null;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+// ---------- shared nav ----------
+let currentScreen = 'upload';
+const NAV_TABS = [
+  {key:'dashboard', label:'Home'},
+  {key:'upload', label:'Scan'},
+  {key:'family', label:'Family'},
+  {key:'settings', label:'Settings'}
+];
+
+function goTo(name){
+  currentScreen = name;
+  if(name === 'dashboard') dashboardViewDate = todayStr();
+  renderScreen(name);
+}
+
+// ---------- SCREEN: upload data ----------
+// Each scanned page is tracked with its source type so the AI step,
+// verification queue, and dashboard all reflect what was actually scanned.
+let documents = [];
+let pageCount = documents.length;
+
+function renderThumbGrid(){
+  const grid = document.getElementById('thumbGrid');
+  if(!grid) return;
+  let html = '';
+  documents.forEach((doc,i)=>{
+    const icon = doc.type === 'bottle' ? '💊' : (doc.type === 'otc' ? '📦' : '📄');
+    const label = doc.type === 'bottle' ? 'Bottle' : (doc.type === 'otc' ? 'OTC Med' : 'Discharge');
+    const photoSrc = doc.image || doc.frontImage;
+    const hasPhoto = !!photoSrc;
+    const style = hasPhoto ? ` style="background-image:url('${photoSrc}')"` : '';
+    html += `<div class="thumb ${doc.type} ${hasPhoto?'has-photo':''}"${style}>
+      ${hasPhoto ? '' : `<span class="typeicon">${icon}</span>`}
+      <span class="pagebadge">p.${i+1}</span>
+      <span class="typelabel">${label}</span>
+      <span class="removeb" onclick="removePage(${i}, event)">✕</span>
+    </div>`;
+  });
+  grid.innerHTML = html;
+  pageCount = documents.length;
+  refreshCta();
+}
+function refreshCta(){
+  const bar = document.getElementById('uploadCtaBar');
+  const btn = document.getElementById('processBtn');
+  if(bar) bar.style.display = pageCount === 0 ? 'none' : 'block';
+  if(btn){
+    btn.disabled = pageCount === 0;
+    btn.textContent = `Process ${pageCount} page${pageCount>1?'s':''} with AI →`;
+  }
+}
+
+// ---- Camera capture flow: open camera -> review photo(s) -> accept/retake ----
+// OTC medicine boxes need two shots (front label, then the directions/dosing
+// panel), so pendingCapture tracks a "stage" for that type only.
+let pendingCapture = null; // { type, image } or { type:'otc', stage, frontImage, directionsImage }
+
+// Some mobile browsers (notably iOS Safari) don't reliably re-fire the
+// "change" event on a file input that's already been used once for a
+// camera capture — which is why a second shot could silently fail to come
+// through. Creating a brand-new <input> for every single shot, instead of
+// reusing one persistent element, avoids that entirely.
+//
+// Two extra defenses added here for real mobile hardware (a headless
+// desktop browser won't surface either of these):
+//  1. display:none can be unreliable for a *dynamically created* file
+//     input on some iOS/Android versions — it's swapped for an
+//     off-screen-but-rendered style instead.
+//  2. input.click() is deferred one frame after the element is attached,
+//     since firing it in the same tick it's created has been flaky on
+//     some WebKit versions.
+function openFileInput(type, useCamera){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  if(useCamera) input.capture = 'environment';
+  input.setAttribute('aria-hidden', 'true');
+  input.style.position = 'fixed';
+  input.style.top = '-9999px';
+  input.style.left = '-9999px';
+  input.style.width = '1px';
+  input.style.height = '1px';
+  input.style.opacity = '0';
+  document.body.appendChild(input);
+
+  let handled = false;
+  const cleanup = ()=>{ if(input.parentNode) input.parentNode.removeChild(input); };
+  const onChange = (e)=>{
+    if(handled) return; // guard against a stray double-fire
+    handled = true;
+    input.removeEventListener('change', onChange);
+    handleCameraFile(type, e.target.files);
+    setTimeout(cleanup, 1000); // give the browser a moment to finish reading the file first
+  };
+  input.addEventListener('change', onChange);
+
+  requestAnimationFrame(()=> input.click());
+}
+
+function sourceLabelFor(type){
+  if(type === 'bottle') return 'medicine bottle label';
+  if(type === 'discharge') return 'discharge paperwork';
+  if(type === 'list') return 'handwritten note or instructions list';
+  if(pendingCapture && pendingCapture.stage === 'directions') return 'directions panel';
+  return 'front label';
+}
+function showSourceChooser(type){
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'sourceChooserBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Add a photo</h3>
+      <p>Scan the ${sourceLabelFor(type)} with your camera, or choose a photo you already have.</p>
+      <div class="source-choices">
+        <button class="btn-modal-save" onclick="closeSourceChooser(); openFileInput('${type}', true)">📷 Take Photo</button>
+        <button class="btn-modal-cancel" onclick="closeSourceChooser(); openFileInput('${type}', false)">🖼 Choose from Files</button>
+        <button class="btn-modal-text" onclick="closeSourceChooser(); cancelPendingCapture()">Cancel</button>
+      </div>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop){ closeSourceChooser(); cancelPendingCapture(); } });
+  document.body.appendChild(backdrop);
+}
+function closeSourceChooser(){
+  const b = document.getElementById('sourceChooserBackdrop');
+  if(b) b.remove();
+}
+function cancelPendingCapture(){
+  pendingCapture = null;
+}
+function triggerScan(type){
+  type = type || 'discharge';
+  pendingCapture = type === 'otc' ? { type:'otc', stage:'front' } : { type };
+  showSourceChooser(type);
+}
+
+function handleCameraFile(type, fileList){
+  const file = fileList && fileList[0];
+  if(!file) return; // user backed out of the camera without taking a photo
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    const dataUrl = e.target.result;
+    if(type === 'otc'){
+      if(!pendingCapture || pendingCapture.type !== 'otc'){
+        pendingCapture = { type:'otc', stage:'front' };
+      }
+      if(pendingCapture.stage === 'front'){
+        pendingCapture.frontImage = dataUrl;
+        pendingCapture.stage = 'directions';
+        showOtcBridge();
+      } else {
+        pendingCapture.directionsImage = dataUrl;
+        openCaptureReview();
+      }
+    } else {
+      pendingCapture = { type, image: dataUrl };
+      openCaptureReview();
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// Mobile browsers only let a file input re-open the camera from inside a
+// real tap — not from a callback that fires after the camera already
+// closed (like FileReader.onload). So between the two OTC shots we show an
+// explicit interstitial the person taps, instead of trying to silently
+// reopen the camera on their behalf (which is what was causing the freeze).
+function showOtcBridge(){
+  if(!pendingCapture) return;
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'otcBridgeBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Front label captured ✓</h3>
+      <img class="capture-preview" style="max-height:32vh;" src="${pendingCapture.frontImage}" alt="Front label" />
+      <p>Now scan the <strong>Directions panel</strong> — the part of the box with the dosing chart.</p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="cancelOtcCapture()">Cancel</button>
+        <button class="btn-modal-save" onclick="continueOtcCapture()">Add Directions Panel →</button>
+      </div>
+    </div>`;
+  document.body.appendChild(backdrop);
+}
+function closeOtcBridge(){
+  const b = document.getElementById('otcBridgeBackdrop');
+  if(b) b.remove();
+}
+function continueOtcCapture(){
+  closeOtcBridge();
+  showSourceChooser('otc'); // real tap just happened, so camera/file picker opens reliably
+}
+function cancelOtcCapture(){
+  closeOtcBridge();
+  pendingCapture = null;
+}
+
+function openCaptureReview(){
+  if(!pendingCapture) return;
+  const isOtc = pendingCapture.type === 'otc';
+  const label = pendingCapture.type === 'bottle' ? '💊 Medicine bottle' : (isOtc ? '📦 OTC medicine box' : (pendingCapture.type === 'list' ? '📝 Handwritten list' : '📄 Discharge paperwork'));
+  const imagesHTML = isOtc
+    ? `<p style="margin:0 0 6px;font-size:12px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;">Front label</p>
+       <img class="capture-preview" style="max-height:24vh;margin-bottom:12px;" src="${pendingCapture.frontImage}" alt="Front label" />
+       <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;">Directions panel</p>
+       <img class="capture-preview" style="max-height:24vh;" src="${pendingCapture.directionsImage}" alt="Directions panel" />`
+    : `<img class="capture-preview" src="${pendingCapture.image}" alt="Captured document" />`;
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'captureBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Use ${isOtc ? 'these photos' : 'this photo'}?</h3>
+      <div class="capture-typepill">${label}</div>
+      ${imagesHTML}
+      <p>Make sure the text is in focus and fully visible before accepting.</p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="retakePhoto()">↺ Retake</button>
+        <button class="btn-modal-save" onclick="acceptPhoto()">✓ Use Photo${isOtc?'s':''}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(backdrop);
+}
+function closeCaptureReview(){
+  const b = document.getElementById('captureBackdrop');
+  if(b) b.remove();
+}
+function retakePhoto(){
+  const type = pendingCapture ? pendingCapture.type : 'discharge';
+  closeCaptureReview();
+  triggerScan(type);
+}
+function acceptPhoto(){
+  if(!pendingCapture) return;
+  if(pendingCapture.type === 'otc'){
+    if(!pendingCapture.frontImage || !pendingCapture.directionsImage) return;
+    documents.push({ type:'otc', frontImage: pendingCapture.frontImage, directionsImage: pendingCapture.directionsImage });
+    showToast('✓ OTC medicine box added');
+  } else if(pendingCapture.type === 'list'){
+    // A list scan doesn't join the batch-processed documents array — it's
+    // read immediately and taken straight to its own review screen instead.
+    if(!pendingCapture.image) return;
+    const image = pendingCapture.image;
+    pendingCapture = null;
+    closeCaptureReview();
+    startListScan(image);
+    return;
+  } else {
+    if(!pendingCapture.image) return;
+    documents.push({ type: pendingCapture.type, image: pendingCapture.image });
+    showToast(pendingCapture.type === 'bottle' ? '✓ Bottle label added' : '✓ Discharge page added');
+  }
+  pageCount = documents.length;
+  pendingCapture = null;
+  closeCaptureReview();
+  renderThumbGrid();
+}
+
+function removePage(i, ev){
+  if(ev) ev.stopPropagation();
+  documents.splice(i,1);
+  pageCount = documents.length;
+  renderThumbGrid();
+}
+function startProcessing(){
+  if(pageCount === 0) return;
+  // NOTE: confirmedItems (the dashboard) is intentionally NOT cleared here —
+  // scanning a new batch of documents adds to the dashboard, it doesn't wipe
+  // out everything already confirmed from earlier scans.
+  verifyIdx = 0;
+  goTo('parse');
+  runExtraction(); // real Claude Vision calls if a key is set, demo data otherwise
+}
+
+// ---------- SCREEN: parsing ----------
+function getParseSteps(docs){
+  const steps = ["Reading layout & tables"];
+  if(docs.some(d=>d.type==='bottle')) steps.push("Reading prescription labels");
+  if(docs.some(d=>d.type==='otc')) steps.push("Matching OTC dosing charts to age range");
+  if(docs.some(d=>d.type==='discharge')) steps.push("Extracting discharge instructions");
+  steps.push("Cross-checking with the family dashboard");
+  steps.push("Flagging anything unclear");
+  return steps;
+}
+let parseSteps = [];
+function renderStepList(activeIdx, doneCount){
+  const el = document.getElementById('stepList');
+  if(!el) return;
+  el.innerHTML = parseSteps.map((s,i)=>{
+    const cls = i < doneCount ? 'done' : (i===activeIdx ? 'active' : '');
+    return `<div class="step ${cls}"><div class="dot"></div>${s}</div>`;
+  }).join('');
+}
+
+// Runs one extraction per scanned document, in order, and drives the ring +
+// step list off REAL progress (each document finishing its OCR pass) rather
+// than a fake timer. Falls back to placeholder demo data per-document if
+// on-device OCR is turned off, unavailable, or that specific pass fails —
+// one bad photo never blocks the rest of the batch.
+async function runExtraction(){
+  parseSteps = getParseSteps(documents);
+  renderStepList(0,0);
+  const ring = document.getElementById('ring');
+  const ringPct = document.getElementById('ringPct');
+  const continueBtn = document.getElementById('parseContinue');
+  if(continueBtn) continueBtn.style.display = 'none';
+
+  const ocrOn = isOcrEnabled() && (typeof Tesseract !== 'undefined' || !!getOcrSpaceKey());
+  resetDemoCounters();
+  verifyItems = [];
+
+  const total = documents.length;
+  for(let i=0; i<total; i++){
+    const doc = documents[i];
+    let item = null;
+    if(ocrOn){
+      try{
+        item = await extractWithOcr(doc);
+      }catch(err){
+        console.error('Kin-Nect OCR error:', err);
+        showToast('⚠️ On-device text scan failed for one item — used placeholder instead');
+      }
+    }
+    if(!item) item = demoItemFor(doc);
+    verifyItems.push(item);
+
+    const doneSteps = Math.min(parseSteps.length, Math.max(1, Math.round(((i+1)/total)*parseSteps.length)));
+    renderStepList(doneSteps, doneSteps);
+    const pct = Math.round(((i+1)/total)*100);
+    if(ring) ring.style.setProperty('--pct', pct);
+    if(ringPct) ringPct.textContent = pct+'%';
+  }
+
+  renderStepList(parseSteps.length, parseSteps.length);
+  if(continueBtn) continueBtn.style.display = 'block';
+}
+
+// ---------- Free, on-device OCR (Tesseract.js) ----------
+// No account, no API key, no per-scan cost, nothing leaves the browser.
+// Trade-off: it recognizes raw text, but it cannot intelligently structure
+// a dosing chart the way a paid vision model could — so results here are
+// the raw scanned text for a person to read, not clean auto-filled fields.
+function isOcrEnabled(){
+  try{
+    const v = localStorage.getItem('kinnect-ocr-enabled');
+    return v === null ? true : v === '1'; // on by default since it's free
+  }catch(e){ return true; }
+}
+function setOcrEnabled(on){ try{ localStorage.setItem('kinnect-ocr-enabled', on ? '1' : '0'); }catch(e){} }
+function toggleOcr(){
+  setOcrEnabled(!isOcrEnabled());
+  renderScreen('settings');
+}
+
+// ---------- Optional: OCR.space free-tier key (better real-world accuracy) ----------
+// Still 100% free — just a hosted engine instead of on-device. If the user has
+// entered their own free API key, we use OCR.space (much better on glossy/
+// small-print real photos). If not, we fall back to on-device Tesseract.js.
+// Nothing is ever sent anywhere unless the user has opted in by adding a key.
+function getOcrSpaceKey(){
+  try{ return (localStorage.getItem('kinnect-ocrspace-key') || '').trim(); }catch(e){ return ''; }
+}
+function setOcrSpaceKey(key){
+  try{
+    const k = String(key || '').trim();
+    if(k) localStorage.setItem('kinnect-ocrspace-key', k);
+    else localStorage.removeItem('kinnect-ocrspace-key');
+  }catch(e){}
+}
+function saveOcrSpaceKeyFromInput(){
+  const input = document.getElementById('ocrSpaceKeyInput');
+  if(!input) return;
+  setOcrSpaceKey(input.value);
+  showToast(input.value.trim() ? '✓ Free OCR.space key saved on this device' : '✓ OCR.space key removed');
+  renderScreen('settings');
+}
+function clearOcrSpaceKey(){
+  setOcrSpaceKey('');
+  showToast('✓ OCR.space key removed — back to on-device scanning');
+  renderScreen('settings');
+}
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function cleanOcrText(raw){
+  return escapeHtml(String(raw || '').replace(/\s+/g,' ').trim()).slice(0, 600);
+}
+
+// ---------- Auto-detect age brackets from a scanned Drug Facts directions panel ----------
+// OTC "Directions" tables are two columns (age bracket | dose instructions) that OCR
+// engines read line-by-line, so the raw text alternates: age-fragment, dose-fragment,
+// age-fragment, dose-fragment... This walks that alternation and reassembles brackets,
+// so we can ask "which age range applies?" as a pick-one question — like the app already
+// does for demo data — instead of asking the user to freehand both an age AND a weight.
+function stripForParsing(raw){
+  return String(raw || '').replace(/\s+/g,' ').trim();
+}
+function parseDirectionsBrackets(rawText){
+  let text = stripForParsing(rawText);
+  if(!text) return [];
+
+  // OCR frequently merges adjacent words/numbers ("adultsand", "6to 11 years").
+  // Fix the common merges, then force a space at every digit/letter boundary —
+  // this splits "6to" -> "6 to" and "24hours" -> "24 hours" so the cue-word
+  // splitter below can find them.
+  text = text
+    .replace(/adults?and/gi, 'adults and')
+    .replace(/childrenand/gi, 'children and')
+    .replace(/(\d)([A-Za-z])/g, '$1 $2')
+    .replace(/([A-Za-z])(\d)/g, '$1 $2')
+    .replace(/\s+/g,' ').trim();
+
+  // Narrow to the actual directions table. The "Purpose ... ask a doctor
+  // before use" warnings preamble that precedes "Directions" on real labels
+  // contains the word "dose" ("ask a doctor before use"), which gets
+  // misread as a dose fragment and shoved into the dose list ahead of the
+  // real doses — shifting every real dose down by one slot relative to the
+  // age list. Likewise, a trailing "Other information" section (storage
+  // temperature, expiration notes) can bleed into the last age segment.
+  // Dropping both keeps the age/dose lists aligned.
+  const dirIdx = text.search(/\bdirections\b/i);
+  if(dirIdx !== -1) text = text.slice(dirIdx);
+  const otherIdx = text.search(/\bother information\b/i);
+  if(otherIdx !== -1) text = text.slice(0, otherIdx);
+
+  // The youngest age group's "dose" is often a standalone contraindication
+  // sentence rather than a bulleted row ("do not use this product in
+  // children under 6 years of age") — pull it out as its own complete
+  // bracket up front and remove it from the text, so the column splitter
+  // below doesn't tear it apart and misread the tail as extra age rows.
+  const doNotUseMatch = text.match(/do not use this product in (children|infants)( under| younger than)?\s*(\d+)\s*years?\s*(of age)?/i);
+  let extraBracket = null;
+  if(doNotUseMatch){
+    extraBracket = { range: (doNotUseMatch[1] + ' under ' + doNotUseMatch[3] + ' years'), dose: doNotUseMatch[0].trim() };
+    text = text.slice(0, doNotUseMatch.index) + text.slice(doNotUseMatch.index + doNotUseMatch[0].length);
+  }
+
+  // Split on pipe characters (common OCR misread of table borders) and on the
+  // boundary right before an age-cue or dose-cue word, so each fragment is
+  // roughly one column-cell's worth of text.
+  const AGE_CUE = /\b(adults?|children|infants?|under|over)\b|\b\d+\s*(?:to\s*\d+\s*)?years?\b/i;
+  const DOSE_CUE = /\b(take|tablets?|teaspoons?|tsp|ml|mL|dose|do not|ask (a )?doctor)\b/i;
+  // Boundary before: "adults/children/infants", a number that starts an age
+  // phrase ("12 years", "6 to 11 years"), "under" (as in "under 6 years"),
+  // AND before a dose-cue word — real photos often run an age qualifier
+  // straight into the dose text on the same line ("12 years and over do
+  // not take..."), so we need a split there too or the two get lumped together.
+  // "children" right after "and" is part of the compound phrase "adults and
+  // children" — don't split there, or that single age group gets torn in two.
+  // Same idea for "take" right after "do not" ("do not take more than...") —
+  // that's a continuation/restriction, not a fresh dosing instruction, so it
+  // must stay attached to "do not" rather than starting its own fragment.
+  // The trailing number in "6 to 11 years" also matches the bare-number-years
+  // pattern on its own ("11 years") — exclude it with a lookbehind so "6 to
+  // 11 years" doesn't get torn into "6 to" (dropped as noise) + "11 years".
+  const SPLIT_BEFORE = /(?=\b(?:adults?|infants?|under)\b)|(?<!and\s)(?=\bchildren\b)|(?<!to\s)(?=\b\d+\s*(?:to\s*\d+\s*)?years?\b)|(?=\bdo not\b)|(?<!do not\s)(?=\btake\b)|(?=\bask (?:a )?doctor\b)/i;
+
+  const rough = text
+    .split(/\s*\|\s*/)
+    .flatMap(s => s.split(SPLIT_BEFORE))
+    .map(s => s.replace(/^[•■\-\s]+/, '').trim())
+    .filter(Boolean);
+
+  // Directions tables get OCR'd in one of two orders depending on the engine:
+  // row-major (age1, dose1, age2, dose2, age2-cont, dose2-cont, ...) or
+  // column-major (age1, age2, age3, ..., dose1, dose2, dose3, ...). Rather than
+  // assume one or the other, build two separate ordered lists — every age-type
+  // fragment either starts a new bracket's age text (if it opens with
+  // "adults/children/infants") or continues the most recent one; same idea for
+  // dose text, starting a new entry on "take ..." / "do not use ...". Zipping
+  // the two lists by index then reconstructs the brackets correctly either way.
+  const AGE_START = /^(adults?|children|infants?)\b/i;
+  const DOSE_START = /^(take\b|do not use\b)/i;
+  const ageSegments = [];
+  const doseSegments = [];
+  for(const frag of rough){
+    const isDose = DOSE_CUE.test(frag);
+    const isAge = AGE_CUE.test(frag) && !isDose;
+    if(isAge){
+      if(!ageSegments.length || AGE_START.test(frag)) ageSegments.push(frag);
+      else ageSegments[ageSegments.length-1] += ' ' + frag;
+    } else if(isDose){
+      if(!doseSegments.length || DOSE_START.test(frag)) doseSegments.push(frag);
+      else doseSegments[doseSegments.length-1] += ' ' + frag;
+    }
+    // Ambiguous fragments (neither cue matches) are dropped — usually stray
+    // OCR noise between cells, not worth guessing which side it belongs to.
+  }
+
+  // Tidy up trailing OCR noise — stray bullets/single letters left over from
+  // a table border or the next cell bleeding in by one character.
+  const tidy = s => s.replace(/\s+/g,' ').replace(/[•■]+/g,'').replace(/\s+\b[a-zA-Z]\b$/,'').trim();
+
+  const brackets = [];
+  const count = Math.min(ageSegments.length, doseSegments.length);
+  for(let i=0; i<count; i++){
+    const range = tidy(ageSegments[i]);
+    const dose = tidy(doseSegments[i]);
+    if(!range || !dose) continue;
+    // Require the age fragment to actually mention an age (a number+"year", or
+    // "under"/"over"/"adults") and the dose fragment to look like an
+    // instruction — otherwise this is probably noise, not a real bracket.
+    const looksLikeAge = /\d+\s*(years?|yrs?|months?)|under|over|adults?/i.test(range);
+    const looksLikeDose = /\d|tablet|teaspoon|ml|dose|do not/i.test(dose);
+    if(looksLikeAge && looksLikeDose && range.length < 60 && dose.length < 140){
+      brackets.push({ range, dose });
+    }
+  }
+
+  // Add the standalone "do not use in children under X" bracket pulled out
+  // above, unless a bracket for that same age already made it through the
+  // general column parse.
+  if(extraBracket){
+    const already = brackets.some(b => /under/i.test(b.range) && b.range.match(/\d+/) && extraBracket.range.match(/\d+/) && b.range.match(/\d+/)[0] === extraBracket.range.match(/\d+/)[0]);
+    if(!already) brackets.push(extraBracket);
+  }
+
+  // De-dupe near-identical brackets and cap the list — a real label has at most a
+  // handful of brackets; anything beyond that is almost certainly OCR noise.
+  const seen = new Set();
+  return brackets.filter(b => {
+    const key = b.range.toLowerCase().slice(0,30);
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 6);
+}
+
+// Rough product-name guess from the front-label OCR text: take the first
+// chunk of letters/spaces before things like an NDC code or a long digit
+// run start showing up (drug facts/brand names read first on most boxes).
+function guessProductName(rawFrontText){
+  const text = stripForParsing(rawFrontText);
+  if(!text) return null;
+  const clean = s => s.replace(/[^A-Za-z0-9®\s&'-]/g, ' ').replace(/\s+/g,' ').trim();
+  // Brand/product names are almost always the first handful of words — take
+  // up to 6 so we don't drag in a whole line of subtext (dosage strength,
+  // "Maximum Strength", etc.) as if it were part of the name.
+  const pickWords = s => clean(s).split(' ').filter(Boolean).slice(0, 6).join(' ');
+
+  // Packaging sometimes repeats the brand name more than once — a small
+  // disclaimer or rebrand notice above the NDC code, then the fuller,
+  // cleaner product name again right after it. Prefer the text right after
+  // the NDC code when it looks like a real multi-word name (that's
+  // consistently the clean name on real boxes we've tested), falling back
+  // to whatever came before NDC — or the very start of the text — only if
+  // the after-NDC text doesn't look like a name.
+  const ndcMatch = text.match(/\bNDC\b\s*[\d-]+/i);
+  const candidates = [];
+  if(ndcMatch){
+    const ndcIdx = text.indexOf(ndcMatch[0]);
+    const before = text.slice(0, ndcIdx);
+    const afterRest = text.slice(ndcIdx + ndcMatch[0].length);
+    const afterCut = afterRest.search(/\d{2,}|[•,]/);
+    candidates.push(afterCut > 0 ? afterRest.slice(0, afterCut) : afterRest.slice(0, 60));
+    candidates.push(before);
+  } else {
+    const cut = text.search(/\d{3,}/i);
+    candidates.push(cut > 3 ? text.slice(0, cut) : text.slice(0, 60));
+  }
+
+  for(const c of candidates){
+    const candidate = pickWords(c);
+    const wordCount = candidate.split(' ').filter(Boolean).length;
+    if(wordCount >= 2 && candidate.length >= 6 && candidate.length <= 60) return candidate;
+  }
+  return null;
+}
+// Preprocess a photo before handing it to Tesseract: upscale small images,
+// convert to grayscale, and stretch contrast. This is all done on-device with
+// a <canvas> — no new dependency, no network call — and meaningfully helps
+// Tesseract read real phone-camera photos of glossy/small-print labels.
+function preprocessForOcr(dataUrl){
+  return new Promise((resolve)=>{
+    try{
+      const img = new Image();
+      img.onload = () => {
+        try{
+          // Upscale small photos — Tesseract does better with more pixels to work with.
+          const minDim = 1200;
+          const scale = Math.max(1, minDim / Math.max(img.width, img.height));
+          const w = Math.round(img.width * scale);
+          const h = Math.round(img.height * scale);
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const imageData = ctx.getImageData(0, 0, w, h);
+          const d = imageData.data;
+
+          // First pass: grayscale + find min/max luminance for contrast stretching.
+          let min = 255, max = 0;
+          const gray = new Uint8ClampedArray(w * h);
+          for(let i = 0, p = 0; i < d.length; i += 4, p++){
+            const g = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+            gray[p] = g;
+            if(g < min) min = g;
+            if(g > max) max = g;
+          }
+          const range = Math.max(1, max - min);
+
+          // Second pass: stretch contrast so the darkest pixel is black and
+          // the lightest is white, which helps a lot with glare/low-contrast labels.
+          for(let i = 0, p = 0; i < d.length; i += 4, p++){
+            const v = Math.round(((gray[p] - min) / range) * 255);
+            d[i] = d[i+1] = d[i+2] = v;
+          }
+          ctx.putImageData(imageData, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        }catch(e){
+          resolve(dataUrl); // if canvas processing fails for any reason, fall back to the original photo
+        }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    }catch(e){
+      resolve(dataUrl);
+    }
+  });
+}
+// Re-encode a data URL as a JPEG under OCR.space's free-tier 1MB limit,
+// stepping quality/size down until it fits. Runs entirely on-device (canvas).
+function compressForUpload(dataUrl, maxBytes){
+  return new Promise((resolve)=>{
+    try{
+      const img = new Image();
+      img.onload = () => {
+        try{
+          let w = img.width, h = img.height;
+          const tryEncode = (width, height, quality) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            return canvas.toDataURL('image/jpeg', quality);
+          };
+          let quality = 0.9;
+          let out = tryEncode(w, h, quality);
+          let guard = 0;
+          while(out.length > maxBytes * 1.37 && guard < 8){ // base64 is ~1.37x raw bytes
+            guard++;
+            if(quality > 0.5){ quality -= 0.15; }
+            else { w = Math.round(w * 0.8); h = Math.round(h * 0.8); }
+            out = tryEncode(w, h, quality);
+          }
+          resolve(out);
+        }catch(e){ resolve(dataUrl); }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    }catch(e){ resolve(dataUrl); }
+  });
+}
+
+// Calls the free OCR.space API with the user's own free key. Returns the
+// recognized text, or throws so the caller can fall back to Tesseract/demo data.
+// Smaller upload = faster transfer on a slow phone connection. OCR.space read
+// our real test photos perfectly even compressed well under the 1MB free-tier
+// cap, so there's no accuracy reason to send the full 1MB every time — cut it
+// down further to shrink the upload time that was causing real timeouts.
+const OCRSPACE_TARGET_BYTES = 600 * 1024;
+
+async function recognizeWithOcrSpaceOnce(dataUrl, apiKey, timeoutMs){
+  const upload = await compressForUpload(dataUrl, OCRSPACE_TARGET_BYTES);
+  const body = new URLSearchParams();
+  body.set('apikey', apiKey);
+  body.set('base64Image', upload);
+  body.set('language', 'eng');
+  body.set('OCREngine', '2');
+  body.set('scale', 'true');
+  body.set('detectOrientation', 'true');
+
+  // OCREngine 2 is slower/more accurate and can occasionally hang on mobile
+  // networks — time it out explicitly rather than leaving the user stuck on
+  // the processing screen, so a bad connection fails fast into the fallback.
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  let res;
+  try{
+    res = await fetch('https://api.ocr.space/parse/image', { method:'POST', body, signal: controller.signal });
+  }catch(err){
+    if(err && err.name === 'AbortError') throw new Error('OCR.space request timed out');
+    throw err;
+  }finally{
+    clearTimeout(timeoutId);
+  }
+  if(!res.ok){
+    if(res.status === 403) throw new Error('OCR.space rejected the API key (403)');
+    if(res.status === 429) throw new Error('OCR.space daily/rate limit reached (429)');
+    throw new Error('OCR.space HTTP ' + res.status);
+  }
+  const json = await res.json();
+  if(json.IsErroredOnProcessing || !json.ParsedResults || !json.ParsedResults.length){
+    throw new Error((json.ErrorMessage && json.ErrorMessage[0]) || 'OCR.space could not read this photo');
+  }
+  return json.ParsedResults.map(r => r.ParsedText || '').join('\n');
+}
+
+// A single dropped packet or slow moment on cell data can time out one
+// request without the connection actually being bad — so a timeout gets one
+// automatic retry (with a longer allowance) before we give up and fall back
+// to the on-device reader. Other error types (bad key, rate limit) don't
+// retry since trying again won't change the outcome.
+async function recognizeWithOcrSpace(dataUrl, apiKey){
+  try{
+    return await recognizeWithOcrSpaceOnce(dataUrl, apiKey, 30000);
+  }catch(err){
+    if(err && err.message === 'OCR.space request timed out'){
+      return await recognizeWithOcrSpaceOnce(dataUrl, apiKey, 45000);
+    }
+    throw err;
+  }
+}
+
+// recognizeText returns { text, engine, error } rather than just a string —
+// callers attach engine/error to the item so a failure shows up PERSISTENTLY
+// in the verify screen. (A shared "last diagnostic" variable would race when
+// the front and directions photos are OCR'd in parallel via Promise.all, so
+// each call carries its own result instead of one being overwritten by the other.)
+async function recognizeText(dataUrl){
+  const key = getOcrSpaceKey();
+  if(key){
+    try{
+      const text = await recognizeWithOcrSpace(dataUrl, key);
+      return { text, engine: 'ocrspace', error: null };
+    }catch(err){
+      console.error('Kin-Nect OCR.space error, falling back to on-device OCR:', err);
+      // Surface the real reason (not just a generic message) so it's
+      // actually possible to tell network hiccup vs. rate limit vs. bad key
+      // apart from the toast alone, without having to open devtools.
+      const reason = (err && err.message) ? String(err.message).slice(0,80) : 'unknown error';
+      showToast(`⚠️ OCR.space unavailable for one photo (${reason}) — used on-device scan instead`);
+      if(typeof Tesseract === 'undefined'){
+        return { text: '', engine: 'none', error: reason };
+      }
+      const processed = await preprocessForOcr(dataUrl);
+      const result = await Tesseract.recognize(processed, 'eng');
+      return { text: (result && result.data && result.data.text) || '', engine: 'tesseract-fallback', error: reason };
+    }
+  }
+  if(typeof Tesseract === 'undefined'){
+    throw new Error('No OCR engine available');
+  }
+  const processed = await preprocessForOcr(dataUrl);
+  const result = await Tesseract.recognize(processed, 'eng');
+  return { text: (result && result.data && result.data.text) || '', engine: 'tesseract', error: null };
+}
+
+function ocrDiagnosticNote(...results){
+  const failed = results.find(r => r.engine === 'tesseract-fallback' || r.engine === 'none');
+  if(!failed) return null;
+  return `⚠ OCR.space couldn't read one of your photos (${failed.error}) — used the weaker on-device reader for it instead.`;
+}
+
+async function extractWithOcr(doc){
+  if(doc.type === 'bottle'){
+    const r = await recognizeText(doc.image);
+    const clean = cleanOcrText(r.text);
+    return {
+      type:"Medication",
+      snippet: clean ? `...${clean.slice(0,220)}...` : "...(no text recognized)...",
+      fields:[["Scanned text", clean || "No text recognized — try retaking the photo closer and in better light."]],
+      confidence:"low",
+      med:{ name:"(fill in from text above)", dose:"", frequency:"" },
+      ocrNote: ocrDiagnosticNote(r),
+      isOcrRaw: true
+    };
+  } else if(doc.type === 'otc'){
+    const [frontResult, dirResult] = await Promise.all([
+      recognizeText(doc.frontImage),
+      recognizeText(doc.directionsImage)
+    ]);
+    const frontRaw = frontResult.text, dirRaw = dirResult.text;
+    const frontClean = cleanOcrText(frontRaw);
+    const dirClean = cleanOcrText(dirRaw);
+    const brackets = parseDirectionsBrackets(dirRaw);
+    const productName = guessProductName(frontRaw);
+    const ocrNote = ocrDiagnosticNote(frontResult, dirResult);
+
+    if(brackets.length){
+      // Directions panel parsed into age brackets — ask which one applies,
+      // same pick-one flow as the demo data, no free-text weight field needed.
+      // Keep just the highlights up front (product name); the full raw OCR
+      // text is still there, tucked behind a "show scanned text" toggle,
+      // rather than dumped in the main view by default.
+      return {
+        type:"OTC Medicine",
+        snippet: `...Front: ${frontClean ? frontClean.slice(0,120) : '(no text recognized)'}... Directions parsed into <mark>${brackets.length} age bracket${brackets.length>1?'s':''}</mark> — confirm which one applies...`,
+        fields:[
+          ["Product", productName || "OTC Medicine"]
+        ],
+        rawFrontText: frontClean,
+        rawDirectionsText: dirClean,
+        confidence:"low",
+        ageGroups: brackets,
+        frequency:'',
+        productName: productName,
+        needsAgeConfirm: true,
+        needsManualAgeEntry: false,
+        selectedAgeIdx: null,
+        manualRange:'',
+        manualDose:'',
+        useCustomAge: false,
+        ocrNote: ocrNote,
+        isOcrRaw: true
+      };
+    }
+    return {
+      type:"OTC Medicine",
+      snippet: `...Front: ${frontClean ? frontClean.slice(0,120) : '(no text recognized)'}... Directions: ${dirClean ? dirClean.slice(0,160) : '(no text recognized)'}...`,
+      fields:[
+        ["Front label text", frontClean || "No text recognized."],
+        ["Directions panel text", dirClean || "No text recognized."]
+      ],
+      confidence:"low",
+      needsAgeConfirm:false,
+      needsManualAgeEntry:true,
+      manualRange:'',
+      manualDose:'',
+      productName: productName,
+      ocrNote: ocrNote,
+      isOcrRaw: true
+    };
+  } else {
+    const r = await recognizeText(doc.image);
+    const clean = cleanOcrText(r.text);
+    return {
+      type:"Other",
+      snippet: clean ? `...${clean.slice(0,220)}...` : "...(no text recognized)...",
+      fields:[["Scanned text", clean || "No text recognized — try retaking the photo closer and in better light."]],
+      confidence:"low",
+      ocrNote: ocrDiagnosticNote(r),
+      isOcrRaw: true
+    };
+  }
+}
+
+// ---------- SCREEN: verification ----------
+// Sample content pools stand in for real OCR/NLP output. Each medicine
+// bottle scanned pulls the next medication; each discharge page pulls the
+// next instruction template, so the dashboard reflects what was scanned.
+const bottleMeds = [
+  {name:"Metoprolol Tartrate", dose:"25 mg", frequency:"Twice daily", qty:"60 tablets", refill:"1 refill left", pharmacy:"CVS Pharmacy #4471"},
+  {name:"Atorvastatin", dose:"40 mg", frequency:"Once daily at bedtime", qty:"30 tablets", refill:"No refills left", pharmacy:"Walgreens #2210"},
+  {name:"Furosemide", dose:"20 mg", frequency:"Once daily, morning", qty:"30 tablets", refill:"2 refills left", pharmacy:"CVS Pharmacy #4471"},
+  {name:"Amoxicillin", dose:"500 mg", frequency:"Three times daily", qty:"21 capsules", refill:"Course completes 8/20", pharmacy:"CVS Pharmacy #4471"}
+];
+const dischargeTemplates = [
+  {
+    type:"Follow-up Appointment",
+    snippet:"...Pt to follow up with <mark>Dr. R. Lee, Cardiology, Thurs 8/13 @ 2:00 PM</mark>, bring med list...",
+    fields:[["Provider","Dr. R. Lee — Cardiology"],["Date","Thu, Aug 13"],["Time","2:00 PM"],["Bring","Current med list"]],
+    confidence:"high"
+  },
+  {
+    type:"Wound Care",
+    snippet:"...keep incision <mark>clean &amp; dry, change dressing qd</mark>, watch for redness/drainage — illegible margin note...",
+    fields:[["Instruction","Change dressing daily"],["Site","Abdominal incision"],["Watch for","Redness or drainage"],["Note","Margin text partly illegible"]],
+    confidence:"low"
+  },
+  {
+    type:"Red-Flag Symptom",
+    snippet:"...call clinic or go to ER for <mark>fever &gt;101°F, chest pain, or shortness of breath</mark>...",
+    fields:[["Call ER if","Fever over 101°F"],["Also watch","Chest pain"],["Also watch","Shortness of breath"]],
+    confidence:"high"
+  },
+  {
+    type:"Activity Restriction",
+    snippet:"...no lifting <mark>over 10 lbs</mark> for 2 weeks, no driving while on <mark>opioid pain medication</mark>...",
+    fields:[["Lifting limit","Under 10 lbs, 2 weeks"],["Driving","Not while on opioids"],["Stairs","OK, using the rail"]],
+    confidence:"high"
+  },
+  {
+    type:"Diet Instructions",
+    snippet:"...resume <mark>low-sodium diet</mark>, encourage fluids, <mark>no alcohol</mark> while on antibiotics...",
+    fields:[["Diet","Low-sodium"],["Fluids","Encourage"],["Alcohol","Avoid on antibiotics"]],
+    confidence:"high"
+  }
+];
+
+// OTC boxes often carry more than one dosing group on the same directions
+// panel (e.g. by age or weight). When a box has just one group there's
+// nothing to ask about; when it has several, the caregiver must confirm
+// which one actually applies before it's saved.
+const otcTemplates = [
+  {
+    name:"Children's Pain & Fever Suspension",
+    ageGroups:[
+      {range:"2–3 yrs (24–35 lb)", dose:"5 mL"},
+      {range:"4–5 yrs (36–47 lb)", dose:"7.5 mL"},
+      {range:"6–8 yrs (48–59 lb)", dose:"10 mL"},
+      {range:"9–10 yrs (60–71 lb)", dose:"12.5 mL"},
+      {range:"11 yrs (72–95 lb)", dose:"15 mL"}
+    ],
+    frequency:"Every 6–8 hours, no more than 4 doses in 24 hours"
+  },
+  {
+    name:"Extra Strength Pain Reliever Caplets",
+    ageGroups:[
+      {range:"Adults & children 12 yrs+", dose:"2 caplets (650 mg)"}
+    ],
+    frequency:"Every 4–6 hours, do not exceed 6 caplets in 24 hours"
+  }
+];
+
+// Fallback placeholder content, used per-document whenever there's no API
+// key set (or a specific call fails) — cycles through a small fixed pool so
+// it never crashes, but it is NOT reading the actual photo.
+let _demoBottleIdx = 0, _demoDischargeIdx = 0, _demoOtcIdx = 0;
+function resetDemoCounters(){ _demoBottleIdx = 0; _demoDischargeIdx = 0; _demoOtcIdx = 0; }
+
+function demoItemFor(doc){
+  if(doc.type === 'bottle'){
+    const med = bottleMeds[_demoBottleIdx % bottleMeds.length];
+    _demoBottleIdx++;
+    return {
+      type:"Medication",
+      snippet:`...Label reads: <mark>${med.name} ${med.dose}</mark> — ${med.frequency}. Qty ${med.qty}. ${med.refill}. — ${med.pharmacy}...`,
+      fields:[["Medication",med.name],["Dose",med.dose],["Frequency",med.frequency],["Refill",med.refill],["Pharmacy",med.pharmacy]],
+      confidence:"high",
+      med: Object.assign({}, med),
+      isPlaceholder: true
+    };
+  } else if(doc.type === 'otc'){
+    const tpl = otcTemplates[_demoOtcIdx % otcTemplates.length];
+    _demoOtcIdx++;
+    const multi = tpl.ageGroups.length > 1;
+    const fields = multi
+      ? [["Product", tpl.name]]
+      : [["Product", tpl.name], ["Dose", tpl.ageGroups[0].dose], ["Who it's for", tpl.ageGroups[0].range], ["Frequency", tpl.frequency]];
+    return {
+      type:"OTC Medicine",
+      snippet: multi
+        ? `...Front label reads: <mark>${tpl.name}</mark>. Directions panel lists <mark>${tpl.ageGroups.length} age/weight brackets</mark> — confirm which one applies...`
+        : `...Front label reads: <mark>${tpl.name}</mark>. Directions panel: <mark>${tpl.ageGroups[0].dose}</mark> for ${tpl.ageGroups[0].range}...`,
+      fields,
+      confidence:"high",
+      ageGroups: tpl.ageGroups.map(g=>Object.assign({}, g)),
+      frequency: tpl.frequency,
+      productName: tpl.name,
+      needsAgeConfirm: multi,
+      selectedAgeIdx: multi ? null : 0,
+      isPlaceholder: true
+    };
+  } else {
+    const tpl = dischargeTemplates[_demoDischargeIdx % dischargeTemplates.length];
+    _demoDischargeIdx++;
+    return Object.assign({}, tpl, {fields: tpl.fields.map(f=>f.slice()), isPlaceholder: true});
+  }
+}
+
+// ---------- Confirmed items (the dashboard) — persisted this device only ----------
+function genId(){ return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function pad2(n){ return String(n).padStart(2,'0'); }
+function formatTimeLabel(hhmm){
+  const [h,m] = String(hhmm||'09:00').split(':').map(Number);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const h12 = ((h % 12) || 12);
+  return `${h12}:${pad2(m)} ${period}`;
+}
+const DAY_LABELS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+// The live link people get texted to open Kin-Nect on their own phone.
+// NOTE: double-check this matches your actual GitHub Pages URL — it's a
+// best guess from the repo name, not something this session can verify by
+// visiting it. Update it here if it's wrong.
+const KINNECT_APP_URL = 'https://toast1318-gif.github.io/kinnect-app/';
+// Builds an sms: link that opens the phone's own Messages app with a
+// pre-filled invite — works without any backend since it just hands off to
+// the native SMS composer. The "?&body=" form (rather than either "?body="
+// or "&body=" alone) is the one that reliably pre-fills on both iOS and Android.
+function buildInviteSmsHref(name){
+  const msg = `Hi ${name}! I set you up on our Kin-Nect care plan so we can keep track of meds & appointments together. Open this to get Kin-Nect on your phone: ${KINNECT_APP_URL}`;
+  return `sms:?&body=${encodeURIComponent(msg)}`;
+}
+function formatFriendlyDate(dateStr){
+  const d = new Date((dateStr || todayStr()) + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+}
+// Current wall-clock time, rounded to the nearest 5 minutes so a fresh
+// schedule's first dose time doesn't land on an odd minute like "9:47" —
+// used to default a brand-new schedule to "starting right now" rather than
+// an arbitrary fixed time, since a lot of real use is "I'm giving this dose
+// right now, so remind me again on schedule from here."
+function nowTimeStr(){
+  const d = new Date();
+  let mins = d.getMinutes();
+  mins = Math.round(mins / 5) * 5;
+  let hours = d.getHours();
+  if(mins === 60){ mins = 0; hours = (hours + 1) % 24; }
+  return `${pad2(hours)}:${pad2(mins)}`;
+}
+
+function loadConfirmedItems(){
+  try{
+    const raw = localStorage.getItem('kinnect-confirmed-items');
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(e){ return []; }
+}
+function saveConfirmedItems(){
+  try{ localStorage.setItem('kinnect-confirmed-items', JSON.stringify(confirmedItems)); }catch(e){}
+}
+
+function isSchedulableType(type){ return type === 'Medication' || type === 'OTC Medicine'; }
+function defaultScheduleFor(){
+  const now = nowTimeStr();
+  return { times:[now], mode:'times', intervalHours:6, intervalStart:now, days:[0,1,2,3,4,5,6], durationMode:'ongoing', startDate: todayStr(), durationDays:7 };
+}
+// Spaces doses every N hours across a 24-hour cycle starting at a given
+// clock time — matches how a lot of real dosing instructions read ("every
+// 4 to 6 hours") without making the person compute and type each time by hand.
+function computeIntervalTimes(startTime, intervalHours){
+  const [h,m] = String(startTime||'08:00').split(':').map(Number);
+  const startMin = (h||0)*60 + (m||0);
+  const stepMin = Math.max(1, Math.min(24, intervalHours||6)) * 60;
+  const times = [];
+  for(let t = startMin; t < startMin + 24*60; t += stepMin){
+    const tm = ((t % (24*60)) + 24*60) % (24*60);
+    times.push(`${pad2(Math.floor(tm/60))}:${pad2(tm%60)}`);
+  }
+  return Array.from(new Set(times)).sort();
+}
+// Every item that lands on the dashboard — whether it came from a real scan,
+// a demo placeholder, manual entry, or a list-scan split — passes through
+// here so it always gets a stable id (needed to target it for editing/
+// calendar export later) and, if it's something you take on a schedule, a
+// default schedule + an empty taken-dose log to build on.
+function finalizeAndSaveItem(item){
+  if(!item.id) item.id = genId();
+  if(!item.createdAt) item.createdAt = Date.now();
+  if(isSchedulableType(item.type)){
+    if(!item.schedule) item.schedule = defaultScheduleFor();
+    if(!item.takenLog) item.takenLog = {};
+  }
+  if(!item.forWhom) item.forWhom = defaultForWhomId();
+  confirmedItems.push(item);
+  saveConfirmedItems();
+  return item;
+}
+// Catches the "tested the scan flow three times in a row" pattern — same
+// medicine, same person, saved within the last hour — before it quietly
+// piles up as separate courses that each think today is their own day 1.
+const DUPLICATE_WINDOW_MS = 60 * 60 * 1000;
+function findLikelyDuplicate(item){
+  if(!isSchedulableType(item.type)) return null;
+  const name = itemDisplayName(item).trim().toLowerCase();
+  if(!name) return null;
+  const cutoff = Date.now() - DUPLICATE_WINDOW_MS;
+  return confirmedItems.find(ci =>
+    ci.forWhom === item.forWhom &&
+    itemDisplayName(ci).trim().toLowerCase() === name &&
+    ci.createdAt && ci.createdAt >= cutoff
+  ) || null;
+}
+// Who a scanned/entered item is for — defaults to whoever is tagged "Care
+// recipient" (matches the existing "Mom's Recovery Plan" assumption), or
+// the first family member if there's no explicit care recipient yet.
+function defaultForWhomId(){
+  if(typeof familyMembers === 'undefined' || !familyMembers.length) return null;
+  const recipient = familyMembers.find(m=>m.role==='Care recipient');
+  return recipient ? recipient.id : familyMembers[0].id;
+}
+function familyMemberName(id){
+  if(typeof familyMembers === 'undefined') return null;
+  const m = familyMembers.find(x=>x.id===id);
+  return m ? m.name : null;
+}
+
+let verifyItems = [];
+let confirmedItems = loadConfirmedItems();
+let verifyIdx = 0;
+function renderVerifyStep(){
+  if(verifyItems.length === 0){
+    document.querySelector('.app-body').innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">🧾</div>
+        <h2 class="screen-title" style="margin-bottom:6px;">Nothing to verify yet</h2>
+        <p class="screen-sub">Scan something first — Kin-Nect will pull it through here before it reaches the dashboard.</p>
+        <button class="cta-btn static" onclick="goTo('upload')">Go to Scan →</button>
+      </div>`;
+    return;
+  }
+  if(verifyIdx >= verifyItems.length){
+    // This batch is fully verified — clear the scanned documents/thumbnails
+    // so the next visit to Scan starts a fresh batch instead of silently
+    // re-processing (and re-adding, as duplicates) pages already confirmed.
+    documents = [];
+    pageCount = 0;
+    document.querySelector('.app-body').innerHTML = `
+      <div style="text-align:center;padding-top:60px;">
+        <div style="font-size:44px;margin-bottom:10px;">✅</div>
+        <h2 class="screen-title" style="margin-bottom:6px;">All items confirmed</h2>
+        <p class="screen-sub">${verifyItems.length} of ${verifyItems.length} verified. Your family dashboard is up to date.</p>
+        <button class="cta-btn static" onclick="goTo('dashboard')">Open the Dashboard →</button>
+      </div>`;
+    return;
+  }
+  const item = verifyItems[verifyIdx];
+  document.getElementById('vp-label').textContent = item.type;
+  document.getElementById('vp-count').textContent = `Item ${verifyIdx+1} of ${verifyItems.length}`;
+  document.getElementById('vp-bar').style.width = `${(verifyIdx/verifyItems.length)*100}%`;
+  if(!item.forWhom) item.forWhom = defaultForWhomId();
+  const forWhomEl = document.getElementById('vp-forwhom');
+  if(forWhomEl){
+    forWhomEl.innerHTML = familyMembers.map(m=>`<option value="${m.id}" ${item.forWhom===m.id?'selected':''}>${escapeHtml(m.name)}</option>`).join('');
+  }
+  // When we've got clean age brackets, the full raw scan text is noise, not
+  // signal — tuck it behind a closed-by-default toggle instead of dumping it
+  // front and center. Everything else (demo data, manual-entry fallback)
+  // keeps the original always-visible snippet since there's nothing tidier to show yet.
+  if(item.rawFrontText !== undefined || item.rawDirectionsText !== undefined){
+    document.getElementById('vp-snippet').innerHTML = `
+      <details class="raw-scan-toggle">
+        <summary>Show original scanned text</summary>
+        <div class="field-row"><span class="k">Front label</span><span class="v">${item.rawFrontText || 'No text recognized.'}</span></div>
+        <div class="field-row"><span class="k">Directions panel</span><span class="v">${item.rawDirectionsText || 'No text recognized.'}</span></div>
+      </details>`;
+  } else {
+    document.getElementById('vp-snippet').innerHTML = item.snippet;
+  }
+  const confEl = document.getElementById('vp-conf');
+  if(item.isPlaceholder){
+    confEl.textContent = '⚠ PLACEHOLDER — not read from your photo';
+    confEl.className = 'confbadge low';
+  } else {
+    confEl.textContent = item.confidence === 'high' ? 'High confidence' : 'Please double-check';
+    confEl.className = 'confbadge ' + (item.confidence === 'high' ? 'high' : 'low');
+  }
+  document.getElementById('vp-fields').innerHTML = item.fields.map(f=>`<div class="field-row"><span class="k">${f[0]}</span><span class="v">${f[1]}</span></div>`).join('');
+  const ocrNoteEl = document.getElementById('vp-ocr-note');
+  if(ocrNoteEl){
+    if(item.ocrNote){ ocrNoteEl.textContent = item.ocrNote; ocrNoteEl.style.display = 'block'; }
+    else { ocrNoteEl.style.display = 'none'; }
+  }
+
+  // OTC boxes with more than one dosing group need an explicit age
+  // confirmation before they can be saved to the family dashboard —
+  // either picking from auto-detected brackets (demo data) or typing in
+  // what they read off the OCR'd directions panel (real on-device OCR,
+  // which can't reliably auto-split a dosing chart on its own).
+  const ageCard = document.getElementById('vp-age-card');
+  const confirmBtn = document.querySelector('.btn-confirm');
+  if(ageCard){
+    if(item.needsAgeConfirm && item.useCustomAge){
+      document.getElementById('vp-age-card-title').textContent = 'Enter the age range & dose';
+      document.getElementById('vp-age-card-hint').textContent = "Read the directions text above, then enter the age and dose for this person.";
+      ageCard.style.display = 'block';
+      document.getElementById('vp-age-body').innerHTML = `
+        <div class="edit-row"><label>Age range</label><input type="text" id="vp-manual-range" value="${(item.manualRange||'').replace(/"/g,'&quot;')}" oninput="onManualAgeInput()" placeholder="e.g. 6 to 11 years" /></div>
+        <div class="edit-row"><label>Dose</label><input type="text" id="vp-manual-dose" value="${(item.manualDose||'').replace(/"/g,'&quot;')}" oninput="onManualAgeInput()" placeholder="e.g. 1 tablet every 4 to 6 hours" /></div>
+        <button class="btn-modal-text" style="width:100%;margin-top:6px;" onclick="useAgeBrackets()">← Back to pick from the list</button>`;
+    } else if(item.needsAgeConfirm){
+      document.getElementById('vp-age-card-title').textContent = 'Which age range applies?';
+      document.getElementById('vp-age-card-hint').textContent = "This box lists more than one dose — pick the one that's right for who it's for before saving.";
+      ageCard.style.display = 'block';
+      document.getElementById('vp-age-body').innerHTML = `<div id="vp-age-options" class="age-options">${item.ageGroups.map((g,idx)=>`
+        <button class="age-option ${item.selectedAgeIdx===idx?'selected':''}" onclick="selectAgeGroup(${idx})">
+          <span>${g.range}</span><span class="age-dose">${g.dose}</span>
+        </button>`).join('')}
+        <button class="age-option custom-option" onclick="useCustomAge()">
+          <span>Something else</span><span class="age-dose">Enter age &amp; dose manually</span>
+        </button></div>`;
+    } else if(item.needsManualAgeEntry){
+      document.getElementById('vp-age-card-title').textContent = 'Which age range & dose applies?';
+      document.getElementById('vp-age-card-hint').textContent = "We couldn't automatically split the directions panel into age brackets from this photo — read the directions text above, then enter the age and dose for this person.";
+      ageCard.style.display = 'block';
+      document.getElementById('vp-age-body').innerHTML = `
+        <div class="edit-row"><label>Age range</label><input type="text" id="vp-manual-range" value="${(item.manualRange||'').replace(/"/g,'&quot;')}" oninput="onManualAgeInput()" placeholder="e.g. 6 to 11 years" /></div>
+        <div class="edit-row"><label>Dose</label><input type="text" id="vp-manual-dose" value="${(item.manualDose||'').replace(/"/g,'&quot;')}" oninput="onManualAgeInput()" placeholder="e.g. 1 tablet every 4 to 6 hours" /></div>`;
+    } else {
+      ageCard.style.display = 'none';
+    }
+  }
+  const scheduleCard = document.getElementById('vp-schedule-card');
+  if(scheduleCard){
+    if(isSchedulableType(item.type)){
+      scheduleCard.style.display = 'block';
+      const isNewItem = !scheduleDraft || scheduleDraft.__forVerifyItem !== item;
+      if(isNewItem){
+        scheduleDraft = cloneSchedule(item.schedule || defaultScheduleFor());
+        scheduleDraft.__containerId = 'vp-schedule-body';
+        scheduleDraft.__forVerifyItem = item;
+        const freqEl = document.getElementById('vp-schedule-freq');
+        if(freqEl) freqEl.value = item.med ? (item.med.frequency||'') : ((item.fields.find(f=>f[0]==='Frequency')||[])[1] || '');
+      }
+      renderScheduleEditor('vp-schedule-body');
+    } else {
+      scheduleCard.style.display = 'none';
+    }
+  }
+  if(confirmBtn){
+    let blocked = false;
+    if(item.needsAgeConfirm && item.useCustomAge) blocked = !(item.manualRange||'').trim() || !(item.manualDose||'').trim();
+    else if(item.needsAgeConfirm) blocked = item.selectedAgeIdx === null;
+    else if(item.needsManualAgeEntry) blocked = !(item.manualRange||'').trim() || !(item.manualDose||'').trim();
+    else if(isSchedulableType(item.type) && scheduleDraft && !scheduleDraft.times.length) blocked = true;
+    confirmBtn.disabled = blocked;
+    confirmBtn.textContent = blocked
+      ? ((item.needsManualAgeEntry || (item.needsAgeConfirm && item.useCustomAge)) ? 'Enter age range & dose first'
+        : (isSchedulableType(item.type) && scheduleDraft && !scheduleDraft.times.length) ? 'Add at least one time first'
+        : 'Select an age range above first')
+      : '✓ Looks right';
+  }
+}
+function setVerifyForWhom(memberId){
+  const item = verifyItems[verifyIdx];
+  if(item) item.forWhom = memberId;
+}
+function selectAgeGroup(idx){
+  const item = verifyItems[verifyIdx];
+  if(!item) return;
+  item.selectedAgeIdx = idx;
+  const g = item.ageGroups && item.ageGroups[idx];
+  if(g && g.dose) applyDoseTextToScheduleDraft(g.dose, item);
+  renderVerifyStep();
+}
+// Reads a dosing-chart sentence like "take 2 tablets every 4 to 6 hours do
+// not take more than 8 tablets in 24 hours" and turns it into a schedule so
+// picking an age bracket fills in the Frequency + Times section below it —
+// the person can still check/adjust it, but doesn't have to retype what the
+// box already told them.
+function parseDoseFrequencyText(doseText){
+  if(!doseText) return null;
+  const text = doseText.toLowerCase();
+  let intervalHours = null;
+  const takeM = text.match(/take\s+([\d.]+)\s*tablets?/);
+  const maxM = text.match(/(?:no more than|not more than)\s+([\d.]+)\s*tablets?\s*in\s*24\s*hours/);
+  if(takeM && maxM){
+    const perDose = parseFloat(takeM[1]);
+    const maxDaily = parseFloat(maxM[1]);
+    if(perDose > 0 && maxDaily > 0){
+      const dosesPerDay = maxDaily / perDose;
+      if(dosesPerDay > 0) intervalHours = Math.round(24 / dosesPerDay);
+    }
+  }
+  if(!intervalHours){
+    const rangeM = text.match(/every\s+(\d+)\s*(?:to|-)\s*(\d+)\s*hours?/);
+    const singleM = text.match(/every\s+(\d+)\s*hours?/);
+    if(rangeM) intervalHours = parseInt(rangeM[2],10);
+    else if(singleM) intervalHours = parseInt(singleM[1],10);
+  }
+  if(!intervalHours){
+    if(/once (a |per )?day|once daily/.test(text)) intervalHours = 24;
+    else if(/twice (a |per )?day|twice daily|two times a day/.test(text)) intervalHours = 12;
+    else if(/three times a day|thrice daily/.test(text)) intervalHours = 8;
+    else if(/four times a day/.test(text)) intervalHours = 6;
+  }
+  if(!intervalHours || intervalHours < 1 || intervalHours > 24) return null;
+  return { intervalHours: Math.max(1, Math.min(24, intervalHours)) };
+}
+function buildFrequencyLabel(doseText){
+  const text = doseText.toLowerCase();
+  const rangeM = text.match(/every\s+(\d+)\s*(?:to|-)\s*(\d+)\s*hours?/);
+  const singleM = text.match(/every\s+(\d+)\s*hours?/);
+  const takeM = text.match(/take\s+([\d.]+)\s*tablets?/);
+  const plural = n => parseFloat(n) === 1 ? '' : 's';
+  if(takeM && rangeM) return `${takeM[1]} tablet${plural(takeM[1])} every ${rangeM[1]}–${rangeM[2]} hours`;
+  if(takeM && singleM) return `${takeM[1]} tablet${plural(takeM[1])} every ${singleM[1]} hours`;
+  if(rangeM) return `Every ${rangeM[1]}–${rangeM[2]} hours`;
+  if(singleM) return `Every ${singleM[1]} hours`;
+  return doseText.charAt(0).toUpperCase() + doseText.slice(1);
+}
+function applyDoseTextToScheduleDraft(doseText, forItem){
+  if(!scheduleDraft || (forItem && scheduleDraft.__forVerifyItem !== forItem)) return;
+  const freqEl = document.getElementById('vp-schedule-freq');
+  if(freqEl) freqEl.value = buildFrequencyLabel(doseText);
+  const parsed = parseDoseFrequencyText(doseText);
+  if(parsed){
+    scheduleDraft.mode = 'interval';
+    scheduleDraft.intervalHours = parsed.intervalHours;
+    if(!scheduleDraft.intervalStart) scheduleDraft.intervalStart = nowTimeStr();
+    scheduleDraft.times = computeIntervalTimes(scheduleDraft.intervalStart, scheduleDraft.intervalHours);
+  }
+}
+// "Something else" on the bracket picker — some real scans mis-split a
+// bracket or miss one entirely, so there's always a manual way out rather
+// than forcing a pick from potentially-wrong auto-detected options.
+function useCustomAge(){
+  const item = verifyItems[verifyIdx];
+  if(!item) return;
+  item.useCustomAge = true;
+  renderVerifyStep();
+}
+function useAgeBrackets(){
+  const item = verifyItems[verifyIdx];
+  if(!item) return;
+  item.useCustomAge = false;
+  renderVerifyStep();
+}
+// Lightweight update for the manual age/dose text inputs — avoids a full
+// re-render (and losing cursor focus) on every keystroke.
+function onManualAgeInput(){
+  const item = verifyItems[verifyIdx];
+  if(!item) return;
+  const rangeEl = document.getElementById('vp-manual-range');
+  const doseEl = document.getElementById('vp-manual-dose');
+  item.manualRange = rangeEl ? rangeEl.value : '';
+  item.manualDose = doseEl ? doseEl.value : '';
+  const confirmBtn = document.querySelector('.btn-confirm');
+  if(confirmBtn){
+    const blocked = !item.manualRange.trim() || !item.manualDose.trim();
+    confirmBtn.disabled = blocked;
+    confirmBtn.textContent = blocked ? 'Enter age range & dose first' : '✓ Looks right';
+  }
+}
+function confirmVerify(){
+  const item = verifyItems[verifyIdx];
+  const usingCustomAge = item.needsAgeConfirm && item.useCustomAge;
+  if(item.needsAgeConfirm && !item.useCustomAge && item.selectedAgeIdx === null){
+    showToast('Please select the age range that applies first');
+    return;
+  }
+  if((usingCustomAge || item.needsManualAgeEntry) && (!(item.manualRange||'').trim() || !(item.manualDose||'').trim())){
+    showToast('Please enter the age range and dose that applies first');
+    return;
+  }
+  if(usingCustomAge){
+    item.fields = [["Product", item.productName || "OTC Medicine"], ["Dose", item.manualDose], ["Who it's for", item.manualRange]];
+  } else if(item.needsAgeConfirm){
+    const g = item.ageGroups[item.selectedAgeIdx];
+    item.fields = [["Product", item.productName || "OTC Medicine"], ["Dose", g.dose], ["Who it's for", g.range]]
+      .concat(item.frequency ? [["Frequency", item.frequency]] : []);
+  } else if(item.needsManualAgeEntry){
+    item.fields = [["Dose", item.manualDose], ["Who it's for", item.manualRange]].concat(item.fields);
+  }
+  if(isSchedulableType(item.type)){
+    if(scheduleDraft && !scheduleDraft.times.length){
+      showToast('Add at least one time before saving');
+      return;
+    }
+    if(scheduleDraft && scheduleDraft.__forVerifyItem === item){
+      const clean = Object.assign({}, scheduleDraft);
+      delete clean.__containerId;
+      delete clean.__forVerifyItem;
+      item.schedule = clean;
+    }
+    const freqEl = document.getElementById('vp-schedule-freq');
+    const freqVal = freqEl ? freqEl.value : '';
+    if(item.med) item.med.frequency = freqVal;
+    else {
+      const f = item.fields.find(f=>f[0]==='Frequency');
+      if(f) f[1] = freqVal; else item.fields.push(['Frequency', freqVal]);
+    }
+  }
+  const dup = findLikelyDuplicate(item);
+  if(dup){
+    showDuplicateWarning(item, dup);
+    return;
+  }
+  finalizeAndSaveItem(item);
+  scheduleDraft = null;
+  verifyIdx++;
+  showToast('✓ Saved to your dashboard');
+  renderVerifyStep();
+}
+function showDuplicateWarning(item, dup){
+  const name = itemDisplayName(item);
+  const forName = familyMemberName(item.forWhom) || 'them';
+  const minsAgo = Math.max(1, Math.round((Date.now() - (dup.createdAt || Date.now())) / 60000));
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'dupBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Looks like this was already added</h3>
+      <p>"${escapeHtml(name)}" was added for ${escapeHtml(forName)} about ${minsAgo} minute${minsAgo===1?'':'s'} ago — probably from testing or rescanning, rather than a real second course.</p>
+      <button class="choice-btn" onclick="skipDuplicateItem()">Skip this one — it's a duplicate</button>
+      <button class="choice-btn" onclick="addDuplicateAnyway()">Add it anyway — it's a real separate item</button>
+      <button class="btn-modal-cancel" style="width:100%;border:none;border-radius:14px;padding:14px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;" onclick="closeDuplicateWarning()">Cancel — let me look again</button>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeDuplicateWarning(); });
+  document.body.appendChild(backdrop);
+}
+function closeDuplicateWarning(){
+  const b = document.getElementById('dupBackdrop');
+  if(b) b.remove();
+}
+function skipDuplicateItem(){
+  closeDuplicateWarning();
+  scheduleDraft = null;
+  verifyIdx++;
+  showToast('Skipped as a duplicate');
+  renderVerifyStep();
+}
+function addDuplicateAnyway(){
+  closeDuplicateWarning();
+  const item = verifyItems[verifyIdx];
+  finalizeAndSaveItem(item);
+  scheduleDraft = null;
+  verifyIdx++;
+  showToast('✓ Saved to your dashboard');
+  renderVerifyStep();
+}
+function openEditModal(){
+  if(verifyIdx >= verifyItems.length) return;
+  const item = verifyItems[verifyIdx];
+  const rows = item.fields.map((f,i)=>`
+    <div class="edit-row">
+      <label>${f[0]}</label>
+      <input type="text" id="edit-field-${i}" value="${String(f[1]).replace(/"/g,'&quot;')}" />
+    </div>`).join('');
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'editBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Edit ${item.type}</h3>
+      <p>Correct anything Kin-Nect read wrong — this updates what's saved to the family dashboard.</p>
+      ${rows}
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeEditModal()">Cancel</button>
+        <button class="btn-modal-save" onclick="saveEditModal()">Save changes</button>
+      </div>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeEditModal(); });
+  document.body.appendChild(backdrop);
+}
+function closeEditModal(){
+  const b = document.getElementById('editBackdrop');
+  if(b) b.remove();
+}
+function saveEditModal(){
+  const item = verifyItems[verifyIdx];
+  item.fields.forEach((f,i)=>{
+    const input = document.getElementById(`edit-field-${i}`);
+    if(input) f[1] = input.value;
+  });
+  if(item.med){
+    const nameField = item.fields.find(f=>f[0]==='Medication');
+    const doseField = item.fields.find(f=>f[0]==='Dose');
+    const freqField = item.fields.find(f=>f[0]==='Frequency');
+    if(nameField) item.med.name = nameField[1];
+    if(doseField) item.med.dose = doseField[1];
+    if(freqField) item.med.frequency = freqField[1];
+  }
+  closeEditModal();
+  showToast('✎ Field updated');
+  renderVerifyStep();
+}
+
+// ---------- SCREEN: dashboard ----------
+const instrIcons = {
+  "Wound Care":"🩹",
+  "Red-Flag Symptom":"🚨",
+  "Activity Restriction":"🚶",
+  "Diet Instructions":"🥗"
+};
+
+// A schedulable item's dose-time slots only show up on days the schedule
+// actually covers — day-of-week selection, plus a start date and optional
+// fixed duration for things like a short antibiotic course.
+// For a fixed-length course (e.g. "7-day antibiotic"), shows how far into
+// it a person is — "Day 3/7" — so a caregiver can tell at a glance without
+// doing date math themselves. Ongoing/ no-duration items return null (no badge).
+function courseDayLabel(item, dateStr){
+  const sched = item.schedule;
+  if(!sched || sched.durationMode !== 'fixed' || !sched.startDate || !sched.durationDays) return null;
+  const startD = new Date(sched.startDate + 'T00:00:00');
+  const curD = new Date((dateStr || todayStr()) + 'T00:00:00');
+  const dayNum = Math.round((curD - startD) / 86400000) + 1;
+  if(dayNum < 1 || dayNum > sched.durationDays) return null;
+  return `Day ${dayNum}/${sched.durationDays}`;
+}
+function isItemActiveOn(item, dateStr){
+  const sched = item.schedule;
+  if(!sched) return true;
+  const days = (sched.days && sched.days.length) ? sched.days : [0,1,2,3,4,5,6];
+  const dow = new Date(dateStr + 'T00:00:00').getDay();
+  if(!days.includes(dow)) return false;
+  if(sched.durationMode === 'fixed' && sched.startDate){
+    if(dateStr < sched.startDate) return false;
+    if(sched.durationDays){
+      const startD = new Date(sched.startDate + 'T00:00:00');
+      const endD = new Date(startD);
+      endD.setDate(endD.getDate() + sched.durationDays - 1);
+      const endStr = endD.getFullYear() + '-' + pad2(endD.getMonth()+1) + '-' + pad2(endD.getDate());
+      if(dateStr > endStr) return false;
+    }
+  }
+  return true;
+}
+function slotStatusFor(item, time, now, dateStr){
+  const key = dateStr + '|' + time;
+  if(item.takenLog && item.takenLog[key]) return 'taken';
+  const [h,m] = time.split(':').map(Number);
+  const slot = new Date(dateStr + 'T00:00:00');
+  slot.setHours(h, m, 0, 0);
+  return now.getTime() >= slot.getTime() ? 'overdue' : 'due';
+}
+function itemDisplayName(item){
+  if(item.med) return `${item.med.name}${item.med.dose ? ' ' + item.med.dose : ''}`.trim();
+  const product = (item.fields.find(f=>f[0]==='Product')||[])[1];
+  return product || item.type || 'Item';
+}
+function toggleMedSlot(itemId, time, dateStr){
+  const item = confirmedItems.find(i=>i.id===itemId);
+  if(!item) return;
+  if(!item.takenLog) item.takenLog = {};
+  const key = (dateStr || todayStr()) + '|' + time;
+  if(item.takenLog[key]) delete item.takenLog[key];
+  else item.takenLog[key] = Date.now();
+  saveConfirmedItems();
+  renderScreen('dashboard');
+}
+const TRASH_ICON_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+      <path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>
+      <path d="M10 11v6M14 11v6"/>
+    </svg>`;
+function trashBtnHTML(itemId, label){
+  return `<button class="delete-btn" onclick="event.stopPropagation(); deleteConfirmedItem('${itemId}')" title="Remove ${escapeHtml(label||'item')}" aria-label="Remove ${escapeHtml(label||'item')}">${TRASH_ICON_SVG}</button>`;
+}
+// Medication/OTC rows are one occurrence of a recurring schedule, so a bare
+// delete is ambiguous — did they mean "I already gave this dose, hide it"
+// or "stop reminding me about this medicine entirely"? This asks first
+// instead of guessing, since silently deleting the whole series when
+// someone only meant to clear today's row would be a bad surprise.
+function trashBtnDoseHTML(itemId, time, label, dateStr){
+  return `<button class="delete-btn" onclick="event.stopPropagation(); openDoseDeleteChoice('${itemId}','${time}','${dateStr}')" title="Remove ${escapeHtml(label||'dose')}" aria-label="Remove ${escapeHtml(label||'dose')}">${TRASH_ICON_SVG}</button>`;
+}
+function openDoseDeleteChoice(itemId, time, dateStr){
+  const item = confirmedItems.find(i=>i.id===itemId);
+  if(!item) return;
+  const name = itemDisplayName(item);
+  const timeLabel = formatTimeLabel(time);
+  const isToday = dateStr === todayStr();
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'doseDeleteBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Remove ${escapeHtml(name)}?</h3>
+      <p>This repeats on a schedule — choose what to remove.</p>
+      <button class="choice-btn" onclick="skipSingleDose('${itemId}','${time}','${dateStr}')">Just ${isToday ? "today's" : `${formatFriendlyDate(dateStr)}'s`} ${timeLabel} dose</button>
+      <button class="choice-btn danger" onclick="deleteConfirmedItem('${itemId}')">The whole series (all upcoming doses)</button>
+      <button class="btn-modal-cancel" style="width:100%;border:none;border-radius:14px;padding:14px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;" onclick="closeDoseDeleteChoice()">Cancel</button>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeDoseDeleteChoice(); });
+  document.body.appendChild(backdrop);
+}
+function closeDoseDeleteChoice(){
+  const b = document.getElementById('doseDeleteBackdrop');
+  if(b) b.remove();
+}
+function skipSingleDose(itemId, time, dateStr){
+  const item = confirmedItems.find(i=>i.id===itemId);
+  if(!item) return;
+  if(!item.skippedDoses) item.skippedDoses = {};
+  item.skippedDoses[(dateStr || todayStr()) + '|' + time] = true;
+  saveConfirmedItems();
+  closeDoseDeleteChoice();
+  showToast(`🗑️ Removed that ${formatTimeLabel(time)} dose`);
+  renderScreen('dashboard');
+}
+function deleteConfirmedItem(itemId){
+  closeDoseDeleteChoice();
+  const idx = confirmedItems.findIndex(i=>i.id===itemId);
+  if(idx === -1) return;
+  const removed = confirmedItems[idx];
+  confirmedItems.splice(idx,1);
+  saveConfirmedItems();
+  showToast(`🗑️ Removed ${itemDisplayName(removed)}`);
+  renderScreen('dashboard');
+}
+
+// "All" or a specific family member id — lets a multi-person household (e.g.
+// Mom and Grandpa both on the same Kin-Nect) see one person's plan at a time
+// instead of everything blurred into one list.
+let dashboardPersonFilter = 'all';
+function setDashboardPersonFilter(id){
+  dashboardPersonFilter = id;
+  renderScreen('dashboard');
+}
+// Which day's doses the medication checklist is currently showing — lets
+// someone page forward to preview an upcoming day's schedule, or back to
+// double-check a day that's passed, without losing "today" as home base
+// (goTo('dashboard') — i.e. tapping the Home tab — always snaps this back).
+let dashboardViewDate = todayStr();
+function shiftDashboardDay(delta){
+  const d = new Date(dashboardViewDate + 'T00:00:00');
+  d.setDate(d.getDate() + delta);
+  dashboardViewDate = d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate());
+  renderScreen('dashboard');
+}
+function resetDashboardDay(){
+  dashboardViewDate = todayStr();
+  renderScreen('dashboard');
+}
+function dashboardBodyHTML(){
+  if(confirmedItems.length === 0){
+    return `
+      <div class="empty-state">
+        <div class="emoji">📭</div>
+        <h2 class="screen-title" style="margin-bottom:6px;">No scans confirmed yet</h2>
+        <p class="screen-sub">Scan a medicine bottle or discharge paper and confirm it — the dashboard only fills in with what's actually been verified.</p>
+        <button class="cta-btn static" onclick="goTo('upload')">Go to Scan →</button>
+      </div>`;
+  }
+
+  const peopleInPlan = familyMembers.filter(m => confirmedItems.some(i=>i.forWhom===m.id));
+  const filterHTML = peopleInPlan.length > 1 ? `
+    <div class="person-filter-row">
+      <button class="person-tab ${dashboardPersonFilter==='all'?'active':''}" onclick="setDashboardPersonFilter('all')">All</button>
+      ${peopleInPlan.map(m=>`<button class="person-tab ${dashboardPersonFilter===m.id?'active':''}" onclick="setDashboardPersonFilter('${m.id}')">${escapeHtml(m.name)}</button>`).join('')}
+    </div>` : '';
+  const visibleItems = dashboardPersonFilter === 'all' ? confirmedItems : confirmedItems.filter(i=>i.forWhom===dashboardPersonFilter);
+  const filteredName = dashboardPersonFilter !== 'all' ? familyMemberName(dashboardPersonFilter) : null;
+
+  const meds = visibleItems.filter(i=>isSchedulableType(i.type));
+  const appts = visibleItems.filter(i=>i.type==='Follow-up Appointment');
+  const others = visibleItems.filter(i=>!isSchedulableType(i.type) && i.type!=='Follow-up Appointment');
+
+  const now = new Date();
+  const today = todayStr();
+  const viewDate = dashboardViewDate;
+  const isViewingToday = viewDate === today;
+  const schedRows = [];
+  meds.forEach(item=>{
+    if(!isItemActiveOn(item, viewDate)) return;
+    const sched = item.schedule;
+    let times = (sched && sched.times && sched.times.length) ? sched.times.slice().sort() : ['09:00'];
+    // "Every X hours" schedules space doses across a full 24-hour clock
+    // cycle, which can wrap around to times earlier in the day than the
+    // actual start time (e.g. starting at 10 PM on a 6-hour interval computes
+    // 4/10/16/22). On the day dosing actually starts, only the start time
+    // itself (and anything later that same day) really happened — the
+    // earlier-clock-time slots belong to the cycle continuing the *next*
+    // day, not to day 1.
+    if(sched && sched.mode === 'interval' && sched.startDate === viewDate && sched.intervalStart){
+      times = times.filter(t => t >= sched.intervalStart);
+    }
+    times.forEach(t => {
+      if(item.skippedDoses && item.skippedDoses[viewDate + '|' + t]) return;
+      schedRows.push({ item, time: t });
+    });
+  });
+  // Chronological — earliest dose of the day at the top, regardless of
+  // which medication it belongs to — rather than grouped medication-by-medication.
+  schedRows.sort((a,b) => a.time.localeCompare(b.time));
+  const tasksDone = schedRows.filter(r => slotStatusFor(r.item, r.time, now, viewDate) === 'taken').length;
+
+  const dayBadgeShown = new Set();
+  const medHTML = schedRows.length ? schedRows.map(r=>{
+    const status = slotStatusFor(r.item, r.time, now, viewDate);
+    const chipClass = status === 'taken' ? 'taken' : (status === 'overdue' ? 'overdue' : 'due');
+    const chipLabel = status === 'taken' ? 'Taken' : (status === 'overdue' ? 'Overdue' : `Due ${formatTimeLabel(r.time)}`);
+    const name = itemDisplayName(r.item);
+    const freq = r.item.med ? r.item.med.frequency : ((r.item.fields.find(f=>f[0]==='Frequency')||[])[1] || '');
+    const forName = familyMemberName(r.item.forWhom);
+    const forBadge = (dashboardPersonFilter === 'all' && forName) ? `<div class="mini-avatar" style="background:${avatarColorFor(forName)};" title="${escapeHtml(forName)}">${escapeHtml(forName.charAt(0).toUpperCase())}</div>` : '';
+    // Shown once per medication per day — not repeated on every dose row of
+    // the same medicine, since the day count doesn't change between doses.
+    const dayLabel = courseDayLabel(r.item, viewDate);
+    let dayBadge = '';
+    if(dayLabel && !dayBadgeShown.has(r.item.id)){
+      dayBadge = `<span class="course-badge">${dayLabel}</span>`;
+      dayBadgeShown.add(r.item.id);
+    }
+    return `
+    <div class="med-item" onclick="openScheduleModal('${r.item.id}')">
+      <div class="checkbox ${status==='taken'?'checked':''}" onclick="event.stopPropagation(); toggleMedSlot('${r.item.id}','${r.time}','${viewDate}')">${status==='taken'?'✓':''}</div>
+      <div class="med-info"><div class="med-name">${escapeHtml(name)}${dayBadge}</div><div class="med-sub">${formatTimeLabel(r.time)}${freq ? ' · ' + escapeHtml(freq) : ''}</div></div>
+      ${forBadge}
+      <div class="status-chip ${chipClass}">${chipLabel}</div>
+      ${trashBtnDoseHTML(r.item.id, r.time, name, viewDate)}
+    </div>`;
+  }).join('') : `<p class="screen-sub" style="margin:0 0 12px;">Nothing scheduled for ${isViewingToday ? 'today' : 'this day'}. ${isViewingToday ? 'Tap a medicine on your dashboard to set its schedule, or scan/add one.' : ''}</p>`;
+
+  const dayNavHTML = `
+    <div class="day-nav">
+      <button type="button" class="day-nav-arrow" onclick="shiftDashboardDay(-1)" aria-label="Previous day">‹</button>
+      <div class="day-nav-center">
+        <div class="day-nav-date">${formatFriendlyDate(viewDate)}${isViewingToday ? '<span class="day-nav-todaytag">Today</span>' : ''}</div>
+        ${!isViewingToday ? `<button type="button" class="day-nav-today-link" onclick="resetDashboardDay()">↩ Jump to today</button>` : ''}
+      </div>
+      <button type="button" class="day-nav-arrow" onclick="shiftDashboardDay(1)" aria-label="Next day">›</button>
+    </div>`;
+
+  const apptHTML = appts.length ? appts.map(a=>{
+    const get = k => (a.fields.find(f=>f[0]===k)||[])[1] || '';
+    const dateStr = get('Date') || '';
+    const dayNum = (dateStr.match(/\d+/)||[''])[0];
+    const monthStr = dateStr.replace(/[A-Za-z]+,\s*/,'').replace(/\d+/,'').trim().slice(0,3) || 'TBD';
+    return `
+    <div class="appt-card">
+      <div class="appt-date"><div class="d">${dayNum||'—'}</div><div class="m">${monthStr}</div></div>
+      <div class="appt-info"><div class="who">${get('Provider')}</div><div class="what">${get('Time')} · bring ${(get('Bring')||'').toLowerCase()}</div></div>
+      <button class="appt-cal-btn" style="background:none;border:none;font-size:19px;cursor:pointer;padding:2px 6px;" onclick="event.stopPropagation(); exportItemIcs('${a.id}')" title="Add to calendar">📅</button>
+      ${trashBtnHTML(a.id, get('Provider') || 'this appointment')}
+    </div>`;
+  }).join('') : '';
+
+  const othersHTML = others.length ? others.map(o=>{
+    const icon = instrIcons[o.type] || '📋';
+    return `
+    <div class="instr-card">
+      <div class="instr-head"><span class="icon">${icon}</span>${o.type}${trashBtnHTML(o.id, o.type)}</div>
+      ${o.fields.map(f=>`<div class="instr-row"><span class="k">${f[0]}</span><span class="v">${f[1]}</span></div>`).join('')}
+    </div>`;
+  }).join('') : '';
+
+  const firstAppt = appts[0];
+  const alertText = firstAppt
+    ? `📩 Text sent to family group: "Follow-up with ${(firstAppt.fields.find(f=>f[0]==='Provider')||[])[1]} is coming up — details are in Kin-Nect."`
+    : `📩 Kin-Nect will text the family group automatically once an appointment is confirmed.`;
+
+  const famAvatars = familyMembers.map(m=>`<div class="avatar" style="background:${avatarColorFor(m.name)};">${escapeHtml((m.name||'?').trim().charAt(0).toUpperCase())}</div>`).join('');
+  const famNames = familyMembers.map(m=>m.name).join(', ').replace(/, ([^,]*)$/, ' & $1');
+
+  return `
+    <h2 class="screen-title">${filteredName ? escapeHtml(filteredName) + "'s Care Plan" : 'Family Care Plan'}</h2>
+    <p class="today-date">${formatFriendlyDate(today)}</p>
+    <div class="fam-row">
+      ${famAvatars}
+      <span class="fam-label">${escapeHtml(famNames)} · shared plan</span>
+    </div>
+    ${filterHTML}
+
+    <div class="stat-row">
+      <div class="stat-tile"><div class="num">${tasksDone}/${schedRows.length}</div><div class="lbl">${isViewingToday ? 'Doses taken today' : 'Doses taken that day'}</div></div>
+      <div class="stat-tile"><div class="num">${visibleItems.length}</div><div class="lbl">Items from your scans</div></div>
+    </div>
+
+    <div class="section-h">Medication checklist</div>
+    ${dayNavHTML}
+    ${medHTML}
+
+    ${appts.length ? `<div class="section-h">Upcoming appointments</div>${apptHTML}` : ''}
+
+    ${others.length ? `<div class="section-h">Care instructions</div>${othersHTML}` : ''}
+
+    <div class="alert-box">${alertText}</div>
+    <div style="height:20px"></div>
+  `;
+}
+// (toggleMedSlot, defined above with the rest of the dashboard scheduling
+// logic, replaced the old cosmetic-only toggleMed — checking a dose off now
+// actually persists which slot was taken, per item, per day.)
+
+// ---------- Shared schedule editor (times / days / duration) ----------
+// Used both by the "Edit schedule" modal on an already-confirmed dashboard
+// item and by the manual-entry form for a brand-new one — same draft
+// object, same rendering function, so behavior stays identical in both
+// places instead of drifting into two slightly different implementations.
+let scheduleDraft = null;
+function cloneSchedule(sched){
+  return sched ? JSON.parse(JSON.stringify(sched)) : defaultScheduleFor();
+}
+function renderScheduleEditor(containerId){
+  const el = document.getElementById(containerId);
+  if(!el || !scheduleDraft) return;
+  const d = scheduleDraft;
+  const isInterval = d.mode === 'interval';
+  const timesHTML = d.times.length
+    ? d.times.map((t,i)=> isInterval
+        ? `<span class="time-chip">${formatTimeLabel(t)}</span>`
+        : `<span class="time-chip">${formatTimeLabel(t)}<span class="chip-x" onclick="removeDraftTime(${i})">✕</span></span>`
+      ).join('')
+    : `<span class="chip-empty">No times set yet</span>`;
+  const allDays = d.days.length === 7;
+  const daysHTML = DAY_LABELS.map((lbl,i)=>{
+    const active = d.days.includes(i);
+    return `<button type="button" class="day-toggle ${active?'active':''}" onclick="toggleDraftDay(${i})">${lbl}</button>`;
+  }).join('');
+  el.innerHTML = `
+    <label class="edit-row-label">Times</label>
+    <div class="day-toggle-row" style="margin-bottom:8px;">
+      <button type="button" class="day-toggle ${!isInterval?'active':''}" onclick="setDraftMode('times')">Specific times</button>
+      <button type="button" class="day-toggle ${isInterval?'active':''}" onclick="setDraftMode('interval')">Every X hours</button>
+    </div>
+    ${isInterval ? `
+    <div class="duration-fixed-row">
+      Every <input type="number" min="1" max="24" id="scheduleIntervalHours" value="${d.intervalHours||6}" onchange="setDraftInterval(this.value, null)" style="width:52px;" /> hours, starting
+      <input type="time" id="scheduleIntervalStart" value="${d.intervalStart||nowTimeStr()}" onchange="setDraftInterval(null, this.value)" />
+    </div>
+    <div class="time-chip-row">${timesHTML}</div>
+    <p class="chip-empty" style="margin:0 0 8px;">Kin-Nect spaces doses across 24 hours automatically from the start time.</p>
+    ` : `
+    <div class="time-chip-row">${timesHTML}</div>
+    <div class="time-add-row">
+      <input type="time" id="scheduleTimeInput" value="${nowTimeStr()}" />
+      <button type="button" class="btn-small" onclick="addDraftTime()">+ Add time</button>
+    </div>
+    `}
+    <label class="edit-row-label" style="margin-top:14px;">Days</label>
+    <div class="day-toggle-row">
+      <button type="button" class="day-toggle ${allDays?'active':''}" onclick="setDraftAllDays()">Every day</button>
+    </div>
+    <div class="day-toggle-row">${daysHTML}</div>
+    <label class="edit-row-label" style="margin-top:14px;">Duration</label>
+    <div class="duration-row">
+      <label><input type="radio" name="durMode" ${d.durationMode==='ongoing'?'checked':''} onclick="setDraftDurationMode('ongoing')"/> Ongoing</label>
+      <label><input type="radio" name="durMode" ${d.durationMode==='fixed'?'checked':''} onclick="setDraftDurationMode('fixed')"/> For a set number of days</label>
+    </div>
+    ${d.durationMode==='fixed' ? `
+    <div class="duration-fixed-row">
+      Starting <input type="date" id="scheduleStartDate" value="${d.startDate}" onchange="scheduleDraft.startDate=this.value" />
+      for <input type="number" min="1" id="scheduleDurationDays" value="${d.durationDays||7}" onchange="scheduleDraft.durationDays=parseInt(this.value,10)||1" /> days
+    </div>` : ''}
+  `;
+  // The verify screen's "Looks right" button needs to stay in sync with
+  // whether a time has been set, without a full renderVerifyStep() (which
+  // would wipe whatever's mid-edit here) — update it directly instead.
+  if(containerId === 'vp-schedule-body'){
+    const confirmBtn = document.querySelector('.btn-confirm');
+    if(confirmBtn){
+      const blocked = !d.times.length;
+      confirmBtn.disabled = blocked;
+      confirmBtn.textContent = blocked ? 'Add at least one time first' : '✓ Looks right';
+    }
+  }
+}
+function setDraftMode(mode){
+  scheduleDraft.mode = mode;
+  if(mode === 'interval'){
+    if(!scheduleDraft.intervalHours) scheduleDraft.intervalHours = 6;
+    if(!scheduleDraft.intervalStart) scheduleDraft.intervalStart = scheduleDraft.times[0] || nowTimeStr();
+    scheduleDraft.times = computeIntervalTimes(scheduleDraft.intervalStart, scheduleDraft.intervalHours);
+  }
+  renderScheduleEditor(scheduleDraft.__containerId);
+}
+function setDraftInterval(hours, start){
+  if(hours !== null && hours !== undefined && hours !== '') scheduleDraft.intervalHours = Math.max(1, Math.min(24, parseInt(hours,10)||6));
+  if(start) scheduleDraft.intervalStart = start;
+  scheduleDraft.times = computeIntervalTimes(scheduleDraft.intervalStart, scheduleDraft.intervalHours);
+  renderScheduleEditor(scheduleDraft.__containerId);
+}
+function addDraftTime(){
+  const input = document.getElementById('scheduleTimeInput');
+  const val = input && input.value;
+  if(!val) return;
+  if(!scheduleDraft.times.includes(val)) scheduleDraft.times.push(val);
+  scheduleDraft.times.sort();
+  renderScheduleEditor(scheduleDraft.__containerId);
+}
+function removeDraftTime(i){
+  scheduleDraft.times.splice(i,1);
+  renderScheduleEditor(scheduleDraft.__containerId);
+}
+function toggleDraftDay(i){
+  const idx = scheduleDraft.days.indexOf(i);
+  if(idx === -1) scheduleDraft.days.push(i); else scheduleDraft.days.splice(idx,1);
+  scheduleDraft.days.sort();
+  renderScheduleEditor(scheduleDraft.__containerId);
+}
+function setDraftAllDays(){
+  scheduleDraft.days = [0,1,2,3,4,5,6];
+  renderScheduleEditor(scheduleDraft.__containerId);
+}
+function setDraftDurationMode(mode){
+  scheduleDraft.durationMode = mode;
+  renderScheduleEditor(scheduleDraft.__containerId);
+}
+
+// ---------- Edit schedule modal (tap a dashboard medicine to open) ----------
+function openScheduleModal(itemId){
+  const item = confirmedItems.find(i=>i.id===itemId);
+  if(!item) return;
+  scheduleDraft = cloneSchedule(item.schedule || defaultScheduleFor());
+  scheduleDraft.__containerId = 'scheduleEditorBody';
+  const freq = item.med ? item.med.frequency : ((item.fields.find(f=>f[0]==='Frequency')||[])[1] || '');
+  const name = itemDisplayName(item);
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'scheduleBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>${escapeHtml(name)}</h3>
+      <p>Adjust when this is taken — this updates today's checklist and any calendar reminders you download.</p>
+      <div class="edit-row">
+        <label>Frequency (label shown on the dashboard)</label>
+        <input type="text" id="scheduleFreqInput" value="${escapeHtml(freq).replace(/"/g,'&quot;')}" placeholder="e.g. Twice daily" />
+      </div>
+      <div class="edit-row">
+        <label>Who's this for</label>
+        <select id="scheduleForWhomInput">${familyMembers.map(m=>`<option value="${m.id}" ${item.forWhom===m.id?'selected':''}>${escapeHtml(m.name)}</option>`).join('')}</select>
+      </div>
+      <div id="scheduleEditorBody"></div>
+      <div class="modal-actions" style="margin-top:16px;">
+        <button class="btn-modal-cancel" onclick="closeScheduleModal()">Cancel</button>
+        <button class="btn-modal-save" onclick="confirmSaveScheduleModal('${itemId}')">Save</button>
+      </div>
+      <button class="btn-modal-text" style="width:100%;margin-top:10px;" onclick="exportItemIcs('${itemId}')">📅 Add to Calendar (.ics)</button>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeScheduleModal(); });
+  document.body.appendChild(backdrop);
+  renderScheduleEditor('scheduleEditorBody');
+}
+function closeScheduleModal(){
+  const b = document.getElementById('scheduleBackdrop');
+  if(b) b.remove();
+  scheduleDraft = null;
+}
+// A medicine has one shared schedule/frequency/person for every dose — there's
+// no separate data for "just this one dose" — so a change here always applies
+// to the whole series. This confirms that plainly before saving, rather than
+// letting someone assume (reasonably!) that it might only affect today's dose.
+function confirmSaveScheduleModal(itemId){
+  const item = confirmedItems.find(i=>i.id===itemId);
+  if(!item || !scheduleDraft) return;
+  if(!scheduleDraft.times.length){
+    showToast('Add at least one time before saving');
+    return;
+  }
+  const name = itemDisplayName(item);
+  const forWhomEl = document.getElementById('scheduleForWhomInput');
+  const forMember = forWhomEl ? familyMembers.find(m=>m.id===forWhomEl.value) : null;
+  const forName = forMember ? forMember.name : familyMemberName(item.forWhom);
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'scheduleConfirmBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Update all doses of ${escapeHtml(name)}?</h3>
+      <p>There's one schedule for this medicine, not a separate one per dose — saving changes every upcoming dose${forName ? ` (for ${escapeHtml(forName)})` : ''} to match, not just today's.</p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeScheduleConfirm()">Go back</button>
+        <button class="btn-modal-save" onclick="applyScheduleModalSave('${itemId}')">Yes, update all doses</button>
+      </div>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeScheduleConfirm(); });
+  document.body.appendChild(backdrop);
+}
+function closeScheduleConfirm(){
+  const b = document.getElementById('scheduleConfirmBackdrop');
+  if(b) b.remove();
+}
+function applyScheduleModalSave(itemId){
+  closeScheduleConfirm();
+  const item = confirmedItems.find(i=>i.id===itemId);
+  if(!item || !scheduleDraft) return;
+  const freqInput = document.getElementById('scheduleFreqInput');
+  const freqVal = freqInput ? freqInput.value : '';
+  const forWhomEl = document.getElementById('scheduleForWhomInput');
+  if(forWhomEl && forWhomEl.value) item.forWhom = forWhomEl.value;
+  const clean = Object.assign({}, scheduleDraft);
+  delete clean.__containerId;
+  item.schedule = clean;
+  if(item.med) item.med.frequency = freqVal;
+  else {
+    const f = item.fields.find(f=>f[0]==='Frequency');
+    if(f) f[1] = freqVal; else item.fields.push(['Frequency', freqVal]);
+  }
+  saveConfirmedItems();
+  closeScheduleModal();
+  showToast('✓ Schedule updated');
+  renderScreen('dashboard');
+}
+
+// ---------- Calendar export (.ics) — free, no account, no backend ----------
+// Works the same for Outlook, Gmail/Google Calendar, and Apple Calendar:
+// a standard .ics file downloads and the phone/computer offers to add it to
+// whichever calendar app is already set up there.
+function icsEscape(s){
+  return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
+}
+function icsLocalDateTime(dateStr, timeStr){
+  return dateStr.replace(/-/g,'') + 'T' + timeStr.replace(':','') + '00';
+}
+function icsUntilFromStartDuration(startDate, durationDays){
+  const d = new Date(startDate + 'T00:00:00');
+  d.setDate(d.getDate() + durationDays - 1);
+  return `${d.getFullYear()}${pad2(d.getMonth()+1)}${pad2(d.getDate())}T235959`;
+}
+function icsDtstampNow(){
+  const n = new Date();
+  return `${n.getUTCFullYear()}${pad2(n.getUTCMonth()+1)}${pad2(n.getUTCDate())}T${pad2(n.getUTCHours())}${pad2(n.getUTCMinutes())}${pad2(n.getUTCSeconds())}Z`;
+}
+const ICS_BYDAY = ['SU','MO','TU','WE','TH','FR','SA'];
+function buildIcsForMedItem(item){
+  const name = itemDisplayName(item);
+  const freq = item.med ? item.med.frequency : ((item.fields.find(f=>f[0]==='Frequency')||[])[1] || '');
+  const sched = item.schedule || defaultScheduleFor();
+  const days = (sched.days && sched.days.length) ? sched.days.slice().sort() : [0,1,2,3,4,5,6];
+  const isDaily = days.length === 7;
+  let rrule = isDaily ? 'RRULE:FREQ=DAILY' : `RRULE:FREQ=WEEKLY;BYDAY=${days.map(i=>ICS_BYDAY[i]).join(',')}`;
+  if(sched.durationMode === 'fixed' && sched.durationDays){
+    rrule += `;UNTIL=${icsUntilFromStartDuration(sched.startDate || todayStr(), sched.durationDays)}`;
+  }
+  const dtstamp = icsDtstampNow();
+  const times = (sched.times && sched.times.length) ? sched.times : ['09:00'];
+  const events = times.map((t,i)=>[
+    'BEGIN:VEVENT',
+    `UID:kinnect-${item.id}-${i}@kinnect.local`,
+    `DTSTAMP:${dtstamp}`,
+    `DTSTART:${icsLocalDateTime(sched.startDate || todayStr(), t)}`,
+    'DURATION:PT15M',
+    rrule,
+    `SUMMARY:${icsEscape('Take ' + name)}`,
+    `DESCRIPTION:${icsEscape(freq || 'Reminder from Kin-Nect')}`,
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Medication reminder',
+    'TRIGGER:-PT0M',
+    'END:VALARM',
+    'END:VEVENT'
+  ].join('\r\n'));
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Kin-Nect//Medication Reminders//EN','CALSCALE:GREGORIAN',...events,'END:VCALENDAR'].join('\r\n');
+}
+// Discharge-paper appointment dates/times are free-text OCR/demo fields
+// ("Thu, Aug 13", "2:00 PM") rather than a real date object, so this is a
+// best-effort parse — if it can't make sense of it, it falls back to
+// "right now" rather than failing the whole export, and the caller is told
+// so it can warn the user to double check the date once it's downloaded.
+function parseApptDateTime(dateStr, timeStr){
+  const year = new Date().getFullYear();
+  const cleanedDate = (dateStr||'').replace(/^[A-Za-z]+,\s*/,'').trim();
+  const guess = new Date(`${cleanedDate} ${year} ${timeStr || '9:00 AM'}`);
+  if(!isNaN(guess.getTime())) return { date: guess, guessed:false };
+  return { date: new Date(), guessed:true };
+}
+function buildIcsForAppointment(item){
+  const get = k => (item.fields.find(f=>f[0]===k)||[])[1] || '';
+  const provider = get('Provider') || 'Appointment';
+  const { date, guessed } = parseApptDateTime(get('Date'), get('Time'));
+  const dateStr = `${date.getFullYear()}-${pad2(date.getMonth()+1)}-${pad2(date.getDate())}`;
+  const timeStr = `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
+  const dtstamp = icsDtstampNow();
+  const bring = get('Bring');
+  const body = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Kin-Nect//Appointments//EN','CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    `UID:kinnect-${item.id}@kinnect.local`,
+    `DTSTAMP:${dtstamp}`,
+    `DTSTART:${icsLocalDateTime(dateStr, timeStr)}`,
+    'DURATION:PT30M',
+    `SUMMARY:${icsEscape('Appointment: ' + provider)}`,
+    `DESCRIPTION:${icsEscape(bring ? ('Bring: ' + bring) : 'Kin-Nect appointment reminder')}`,
+    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Appointment reminder','TRIGGER:-PT60M','END:VALARM',
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  return { content: body, guessed };
+}
+function downloadIcs(filename, content){
+  const blob = new Blob([content], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ if(a.parentNode) a.parentNode.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+}
+function exportItemIcs(itemId){
+  const item = confirmedItems.find(i=>i.id===itemId);
+  if(!item) return;
+  if(item.type === 'Follow-up Appointment'){
+    const { content, guessed } = buildIcsForAppointment(item);
+    downloadIcs('kinnect-appointment.ics', content);
+    showToast(guessed ? "📅 Calendar file downloaded — double-check the date/time, it wasn't read automatically" : '📅 Calendar file downloaded — open it to add the reminder');
+  } else {
+    downloadIcs('kinnect-medication-reminder.ics', buildIcsForMedItem(item));
+    showToast('📅 Calendar file downloaded — open it to add the reminder(s)');
+  }
+}
+
+// ---------- On-device reminders (Notification API + service worker) ----------
+// Honest limitation, stated plainly in Settings too: this fires a
+// notification while Kin-Nect is open, or was recently open, on THIS
+// phone — it is not a real server-sent push and can't wake the app from
+// fully closed. That needs a backend that knows about every family
+// member's device, which is the next build phase.
+let swRegistration = null;
+let reminderTimer = null;
+async function registerServiceWorker(){
+  if(!('serviceWorker' in navigator)) return null;
+  try{
+    swRegistration = await navigator.serviceWorker.register('sw.js');
+    return swRegistration;
+  }catch(e){ console.error('Kin-Nect service worker registration failed:', e); return null; }
+}
+function isRemindersEnabled(){
+  try{ return localStorage.getItem('kinnect-reminders-enabled') === '1'; }catch(e){ return false; }
+}
+async function toggleReminders(){
+  if(isRemindersEnabled()){
+    try{ localStorage.setItem('kinnect-reminders-enabled', '0'); }catch(e){}
+    stopReminderLoop();
+    renderScreen('settings');
+    return;
+  }
+  if(!('Notification' in window)){ showToast('Notifications are not supported in this browser'); return; }
+  const perm = await Notification.requestPermission();
+  if(perm !== 'granted'){ showToast('Notification permission was not granted'); return; }
+  await registerServiceWorker();
+  try{ localStorage.setItem('kinnect-reminders-enabled', '1'); }catch(e){}
+  startReminderLoop();
+  showToast('✓ On-device reminders turned on');
+  renderScreen('settings');
+}
+function startReminderLoop(){
+  if(reminderTimer) return;
+  checkDueReminders();
+  reminderTimer = setInterval(checkDueReminders, 60000);
+}
+function stopReminderLoop(){
+  if(reminderTimer){ clearInterval(reminderTimer); reminderTimer = null; }
+}
+function fireDoseNotification(item, time){
+  const name = itemDisplayName(item);
+  const dose = item.med ? item.med.dose : ((item.fields.find(f=>f[0]==='Dose')||[])[1] || '');
+  const body = `${formatTimeLabel(time)} dose${dose ? ' — ' + dose : ''}`;
+  const title = `Time for ${name}`;
+  if(swRegistration && swRegistration.showNotification){
+    swRegistration.showNotification(title, { body, tag: item.id + '-' + time });
+  } else if('Notification' in window && Notification.permission === 'granted'){
+    new Notification(title, { body });
+  }
+}
+// Checked every 60s while the app/tab is alive. Only notifies for a
+// schedule slot once (tracked per item, per day, in notifiedLog — separate
+// from takenLog), within a few minutes of it actually becoming due, and
+// only for people who have push turned on in Family & sharing.
+function checkDueReminders(){
+  if(!isRemindersEnabled()) return;
+  const now = new Date();
+  const today = todayStr();
+  let changed = false;
+  confirmedItems.filter(i=>isSchedulableType(i.type)).forEach(item=>{
+    const person = familyMembers.find(m=>m.id===item.forWhom);
+    if(person && person.notifyPush === false) return;
+    if(!isItemActiveOn(item, today)) return;
+    const times = (item.schedule && item.schedule.times && item.schedule.times.length) ? item.schedule.times : ['09:00'];
+    times.forEach(t=>{
+      const key = today + '|' + t;
+      if(item.takenLog && item.takenLog[key]) return;
+      if(!item.notifiedLog) item.notifiedLog = {};
+      if(item.notifiedLog[key]) return;
+      const [h,m] = t.split(':').map(Number);
+      const slot = new Date(today + 'T00:00:00');
+      slot.setHours(h, m, 0, 0);
+      const diffMin = (now.getTime() - slot.getTime()) / 60000;
+      if(diffMin >= 0 && diffMin < 5){
+        fireDoseNotification(item, t);
+        item.notifiedLog[key] = true;
+        changed = true;
+      }
+    });
+  });
+  if(changed) saveConfirmedItems();
+}
+
+// ---------- Manual entry (type it in yourself, no photo needed) ----------
+// Reachable two ways: the "Enter manually" link on the Scan screen (goes
+// straight to the dashboard when saved), and the "+ Add item" button on the
+// list-scan review screen (returns to that screen so several items can be
+// added from one photo of a handwritten note).
+let manualEntryType = 'Medication';
+let manualEntryReturnScreen = 'dashboard';
+function openManualEntryModal(returnScreen){
+  manualEntryReturnScreen = returnScreen || 'dashboard';
+  manualEntryType = 'Medication';
+  scheduleDraft = defaultScheduleFor();
+  scheduleDraft.__containerId = 'manualScheduleBody';
+  renderManualEntryModal();
+}
+function manualEntryTypeFieldsHTML(type){
+  if(type === 'Medication'){
+    return `
+      <div class="edit-row"><label>Medication name</label><input type="text" id="me-name" placeholder="e.g. Metoprolol Tartrate" /></div>
+      <div class="edit-row"><label>Dose</label><input type="text" id="me-dose" placeholder="e.g. 25 mg" /></div>
+      <div id="manualScheduleBody"></div>`;
+  }
+  if(type === 'OTC Medicine'){
+    return `
+      <div class="edit-row"><label>Product</label><input type="text" id="me-product" placeholder="e.g. Children's Tylenol" /></div>
+      <div class="edit-row"><label>Dose</label><input type="text" id="me-dose" placeholder="e.g. 1 tablet" /></div>
+      <div class="edit-row"><label>Who it's for</label><input type="text" id="me-whofor" placeholder="e.g. Grandpa, adult dose" /></div>
+      <div id="manualScheduleBody"></div>`;
+  }
+  if(type === 'Follow-up Appointment'){
+    return `
+      <div class="edit-row"><label>Provider</label><input type="text" id="me-provider" placeholder="e.g. Dr. R. Lee — Cardiology" /></div>
+      <div class="edit-row"><label>Date</label><input type="text" id="me-date" placeholder="e.g. Thu, Aug 13" /></div>
+      <div class="edit-row"><label>Time</label><input type="text" id="me-time" placeholder="e.g. 2:00 PM" /></div>
+      <div class="edit-row"><label>Bring</label><input type="text" id="me-bring" placeholder="e.g. Current med list" /></div>`;
+  }
+  return `
+    <div class="edit-row"><label>Title</label><input type="text" id="me-title" placeholder="e.g. Wound Care" /></div>
+    <div class="edit-row"><label>Note</label><input type="text" id="me-note" placeholder="What should the family know?" /></div>`;
+}
+function renderManualEntryModal(){
+  let backdrop = document.getElementById('manualEntryBackdrop');
+  const isNew = !backdrop;
+  if(isNew){
+    backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    backdrop.id = 'manualEntryBackdrop';
+    backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeManualEntryModal(); });
+    document.body.appendChild(backdrop);
+  }
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>Add an item manually</h3>
+      <p>Type it in yourself — useful for a handwritten note or anything a photo can't capture cleanly.</p>
+      <div class="edit-row">
+        <label>Type</label>
+        <select id="me-type" onchange="switchManualEntryType(this.value)">
+          <option value="Medication" ${manualEntryType==='Medication'?'selected':''}>Medication</option>
+          <option value="OTC Medicine" ${manualEntryType==='OTC Medicine'?'selected':''}>OTC Medicine</option>
+          <option value="Follow-up Appointment" ${manualEntryType==='Follow-up Appointment'?'selected':''}>Appointment</option>
+          <option value="Other" ${manualEntryType==='Other'?'selected':''}>Other instruction</option>
+        </select>
+      </div>
+      <div class="edit-row">
+        <label>Who's this for</label>
+        <select id="me-forwhom">${familyMembers.map(m=>`<option value="${m.id}" ${defaultForWhomId()===m.id?'selected':''}>${escapeHtml(m.name)}</option>`).join('')}</select>
+      </div>
+      <div id="me-fields">${manualEntryTypeFieldsHTML(manualEntryType)}</div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeManualEntryModal()">Cancel</button>
+        <button class="btn-modal-save" onclick="submitManualEntry()">Save item</button>
+      </div>
+    </div>`;
+  if(manualEntryType === 'Medication' || manualEntryType === 'OTC Medicine'){
+    renderScheduleEditor('manualScheduleBody');
+  }
+}
+function switchManualEntryType(type){
+  manualEntryType = type;
+  if(type === 'Medication' || type === 'OTC Medicine'){
+    scheduleDraft = defaultScheduleFor();
+    scheduleDraft.__containerId = 'manualScheduleBody';
+  }
+  renderManualEntryModal();
+}
+function closeManualEntryModal(){
+  const b = document.getElementById('manualEntryBackdrop');
+  if(b) b.remove();
+  scheduleDraft = null;
+}
+function submitManualEntry(){
+  const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  let item = null;
+  if(manualEntryType === 'Medication'){
+    const name = val('me-name');
+    if(!name){ showToast('Please enter a medication name'); return; }
+    if(!scheduleDraft.times.length){ showToast('Add at least one time'); return; }
+    const dose = val('me-dose');
+    item = {
+      type:'Medication',
+      snippet:`Manually entered: ${name} ${dose}`,
+      fields:[["Medication",name],["Dose",dose]],
+      confidence:'high',
+      med:{ name, dose, frequency:'' },
+      schedule: Object.assign({}, scheduleDraft),
+      isManualEntry:true
+    };
+    delete item.schedule.__containerId;
+  } else if(manualEntryType === 'OTC Medicine'){
+    const product = val('me-product');
+    if(!product){ showToast('Please enter a product name'); return; }
+    if(!scheduleDraft.times.length){ showToast('Add at least one time'); return; }
+    const dose = val('me-dose');
+    const whoFor = val('me-whofor');
+    item = {
+      type:'OTC Medicine',
+      snippet:`Manually entered: ${product}`,
+      fields:[["Product",product]].concat(dose?[["Dose",dose]]:[]).concat(whoFor?[["Who it's for",whoFor]]:[]),
+      confidence:'high',
+      productName: product,
+      schedule: Object.assign({}, scheduleDraft),
+      isManualEntry:true
+    };
+    delete item.schedule.__containerId;
+  } else if(manualEntryType === 'Follow-up Appointment'){
+    const provider = val('me-provider');
+    if(!provider){ showToast('Please enter who the appointment is with'); return; }
+    item = {
+      type:'Follow-up Appointment',
+      snippet:`Manually entered: ${provider}`,
+      fields:[["Provider",provider],["Date",val('me-date')],["Time",val('me-time')],["Bring",val('me-bring')]],
+      confidence:'high',
+      isManualEntry:true
+    };
+  } else {
+    const title = val('me-title');
+    if(!title){ showToast('Please enter a title'); return; }
+    item = {
+      type: title,
+      snippet:`Manually entered: ${title}`,
+      fields:[["Note", val('me-note') || '—']],
+      confidence:'high',
+      isManualEntry:true
+    };
+  }
+  const forWhomEl = document.getElementById('me-forwhom');
+  if(forWhomEl && forWhomEl.value) item.forWhom = forWhomEl.value;
+  finalizeAndSaveItem(item);
+  closeManualEntryModal();
+  showToast('✓ Added to dashboard');
+  if(manualEntryReturnScreen === 'listreview'){
+    listScanAddedNames.push(itemDisplayName(item));
+    renderListReview(false);
+  } else {
+    goTo('dashboard');
+  }
+}
+
+// ---------- Scan a list (handwritten multi-med notes) ----------
+// A single photo, OCR'd once, with the raw text kept on screen as a
+// reference while the manual-entry form above is used to split it into as
+// many separate dashboard items as needed — e.g. mom's handwritten
+// instructions for several of grandpa's medicines while she's away.
+let listScanText = '';
+let listScanLoading = false;
+let listScanAddedNames = [];
+async function startListScan(image){
+  listScanText = '';
+  listScanAddedNames = [];
+  listScanLoading = true;
+  goTo('listreview');
+  try{
+    const r = await recognizeText(image);
+    listScanText = cleanOcrText(r.text);
+    if(r.engine === 'tesseract-fallback' || r.engine === 'none'){
+      showToast('⚠ Used the on-device reader for this photo — text may be rough');
+    }
+  }catch(err){
+    console.error('Kin-Nect list scan error:', err);
+    listScanText = '';
+    showToast('⚠️ Could not read this photo — you can still add items manually below');
+  }
+  listScanLoading = false;
+  renderListReview(false);
+}
+function renderListReview(){
+  if(currentScreen !== 'listreview') return;
+  const body = document.getElementById('listReviewBody');
+  if(!body) return;
+  body.innerHTML = listReviewBodyHTML();
+}
+function listReviewBodyHTML(){
+  const textBlock = listScanLoading
+    ? `<p class="screen-sub">Reading your photo…</p>`
+    : `<div class="doc-card" style="white-space:pre-wrap;">${listScanText || 'No text recognized — add items manually below using what you can read from the photo yourself.'}</div>`;
+  const addedHTML = listScanAddedNames.length
+    ? `<div class="section-h">Added from this scan (${listScanAddedNames.length})</div>` +
+      listScanAddedNames.map(n=>`<div class="instr-row"><span class="k">✓</span><span class="v">${escapeHtml(n)}</span></div>`).join('')
+    : '';
+  return `
+    <h2 class="screen-title">Add items from this scan</h2>
+    <p class="screen-sub">Read what was scanned, then add each medicine or instruction as its own dashboard item.</p>
+    ${textBlock}
+    ${addedHTML}
+    <button class="cta-btn static" style="margin-top:14px;" onclick="openManualEntryModal('listreview')">+ Add item</button>
+    <button class="cta-btn ghost" style="margin-top:10px;" onclick="goTo('dashboard')">Done — go to dashboard →</button>
+  `;
+}
+
+// ---------- placeholder screens ----------
+// ---------- Family members (real add/edit/remove — this device only) ----------
+// There's no shared backend yet, so this list lives in localStorage on THIS
+// device/browser. Adding someone here updates what YOU see immediately; it's
+// not a real invite that reaches their phone until Kin-Nect has real shared
+// accounts. We say so plainly in the UI rather than pretending it's connected.
+const FAM_COLORS = ['#2a78d6','#1baf7a','#4a3aa7','#c9702e','#b6398f','#2c9aa3'];
+function avatarColorFor(seed){
+  let h = 0;
+  const s = String(seed || '');
+  for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) >>> 0;
+  return FAM_COLORS[h % FAM_COLORS.length];
+}
+// Push and calendar reminders are independent per person — a caregiver
+// might want push, the care recipient themselves might want neither, and
+// someone else might just want it on their calendar as a backup. Owner and
+// Caregiver default to both on; Care recipient/Viewer default to both off,
+// but every toggle can be changed per person regardless of role.
+function defaultNotifyFor(role){
+  const active = role === 'Owner' || role === 'Caregiver';
+  return { notifyPush: active, notifyCalendar: active };
+}
+function defaultFamilyMembers(){
+  return [
+    Object.assign({ id:'seed-1', name:'Christos', role:'Owner', note:'Scans documents' }, defaultNotifyFor('Owner')),
+    Object.assign({ id:'seed-2', name:'Sarah', role:'Caregiver', note:'Gets text alerts' }, defaultNotifyFor('Caregiver')),
+    Object.assign({ id:'seed-3', name:'Mom', role:'Care recipient', note:'View only' }, defaultNotifyFor('Care recipient'))
+  ];
+}
+function loadFamilyMembers(){
+  try{
+    const raw = localStorage.getItem('kinnect-family-members');
+    if(!raw) return defaultFamilyMembers();
+    const parsed = JSON.parse(raw);
+    if(!Array.isArray(parsed) || !parsed.length) return defaultFamilyMembers();
+    // Backfill notify preferences for members saved by an older build that
+    // didn't have this field yet.
+    return parsed.map(m => Object.assign({}, defaultNotifyFor(m.role), m));
+  }catch(e){ return defaultFamilyMembers(); }
+}
+function saveFamilyMembers(){
+  try{ localStorage.setItem('kinnect-family-members', JSON.stringify(familyMembers)); }catch(e){}
+}
+let familyMembers = loadFamilyMembers();
+
+function familyBodyHTML(){
+  const avatars = familyMembers.map(m => `<div class="avatar" style="background:${avatarColorFor(m.name)};">${(m.name||'?').trim().charAt(0).toUpperCase()}</div>`).join('');
+  const cards = familyMembers.map(m => `
+    <div class="instr-card">
+      <div class="instr-head"><span class="icon">👤</span>${escapeHtml(m.name)}</div>
+      <div class="instr-row"><span class="k">Role</span><span class="v">${escapeHtml(m.role)}${m.note ? ' · ' + escapeHtml(m.note) : ''}</span></div>
+      <div class="instr-row"><span class="k">Notifications</span><span class="v">${m.notifyPush?'📲 Push':''}${m.notifyPush&&m.notifyCalendar?' · ':''}${m.notifyCalendar?'📅 Calendar':''}${!m.notifyPush&&!m.notifyCalendar?'None':''}</span></div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn-modal-cancel" style="flex:1;padding:8px;font-size:13px;" onclick="sendTextInvite('${escapeHtml(m.name).replace(/'/g,"\\'")}', false)">💬 Text invite</button>
+        <button class="btn-modal-cancel" style="flex:1;padding:8px;font-size:13px;" onclick="openFamilyModal('${m.id}')">✎ Edit</button>
+        <button class="btn-modal-cancel" style="flex:1;padding:8px;font-size:13px;color:var(--critical);" onclick="removeFamilyMember('${m.id}')">Remove</button>
+      </div>
+    </div>`).join('');
+  return `
+    <h2 class="screen-title">Family &amp; sharing</h2>
+    <p class="screen-sub">Everyone on this list sees the same care plan on this device. Real cross-device syncing (so it updates live on THEIR phone too) is the next build phase — for now, adding someone here updates your local list.</p>
+    <div class="fam-row" style="margin-bottom:22px;">
+      ${avatars}
+      <span class="fam-label">${familyMembers.length} ${familyMembers.length===1?'person':'people'} on this plan</span>
+    </div>
+    ${cards}
+    <button class="cta-btn static" style="margin-top:8px;" onclick="openFamilyModal(null)">+ Add / invite a family member</button>
+  `;
+}
+
+function openFamilyModal(memberId){
+  const existing = memberId ? familyMembers.find(m => m.id === memberId) : null;
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'familyBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>${existing ? 'Edit family member' : 'Add / invite a family member'}</h3>
+      <p>${existing ? "Update their name or role on this device's care plan." : "This adds them to your local care plan, then offers to text them the Kin-Nect link. Their phone won't automatically show your saved dashboard yet — that needs real shared accounts, which isn't wired up yet."}</p>
+      <div class="edit-row"><label>Name</label><input type="text" id="fam-name" value="${existing ? escapeHtml(existing.name) : ''}" placeholder="e.g. Sarah" /></div>
+      <div class="edit-row"><label>Role</label>
+        <select id="fam-role" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid var(--hairline, rgba(0,0,0,0.15));font-size:14px;">
+          ${['Owner','Caregiver','Care recipient','Viewer'].map(r => `<option value="${r}" ${existing && existing.role===r ? 'selected' : ''}>${r}</option>`).join('')}
+        </select>
+      </div>
+      <div class="edit-row"><label>Note (optional)</label><input type="text" id="fam-note" value="${existing ? escapeHtml(existing.note||'') : ''}" placeholder="e.g. Gets text alerts" /></div>
+      <label class="edit-row-label">Notifications</label>
+      <div class="duration-row">
+        <label><input type="checkbox" id="fam-notify-push" ${(existing ? existing.notifyPush : defaultNotifyFor(existing?existing.role:'Caregiver').notifyPush) ? 'checked' : ''}/> Push reminders (on this device, once set up in Settings)</label>
+        <label><input type="checkbox" id="fam-notify-cal" ${(existing ? existing.notifyCalendar : defaultNotifyFor(existing?existing.role:'Caregiver').notifyCalendar) ? 'checked' : ''}/> Calendar invites (.ics)</label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeFamilyModal()">Cancel</button>
+        <button class="btn-modal-save" onclick="saveFamilyModal(${existing ? `'${existing.id}'` : 'null'})">${existing ? 'Save changes' : 'Add to plan'}</button>
+      </div>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeFamilyModal(); });
+  document.body.appendChild(backdrop);
+}
+function closeFamilyModal(){
+  const b = document.getElementById('familyBackdrop');
+  if(b) b.remove();
+}
+function saveFamilyModal(memberId){
+  const nameEl = document.getElementById('fam-name');
+  const roleEl = document.getElementById('fam-role');
+  const noteEl = document.getElementById('fam-note');
+  const notifyPush = !!(document.getElementById('fam-notify-push')||{}).checked;
+  const notifyCalendar = !!(document.getElementById('fam-notify-cal')||{}).checked;
+  const name = (nameEl && nameEl.value || '').trim();
+  if(!name){ showToast('Enter a name first'); return; }
+  const role = roleEl ? roleEl.value : 'Caregiver';
+  const note = (noteEl && noteEl.value || '').trim();
+  if(memberId){
+    const m = familyMembers.find(x => x.id === memberId);
+    if(m){ m.name = name; m.role = role; m.note = note; m.notifyPush = notifyPush; m.notifyCalendar = notifyCalendar; }
+    saveFamilyMembers();
+    closeFamilyModal();
+    showToast('✓ Updated');
+    renderScreen('family');
+  } else {
+    const id = 'fam-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+    familyMembers.push({ id, name, role, note, notifyPush, notifyCalendar });
+    saveFamilyMembers();
+    closeFamilyModal();
+    renderScreen('family');
+    // Show the placeholder invite code in its own follow-up modal — the
+    // person is already added locally, this is just a preview of what
+    // sharing would look like once real shared accounts exist.
+    showInviteCodeModal(name);
+  }
+}
+function showInviteCodeModal(name){
+  sendTextInvite(name, true);
+}
+// Opens the phone's Messages app with a pre-filled invite text. Used both
+// right after adding someone, and any time later from their card in case
+// the first text didn't land or they got a new phone.
+function sendTextInvite(name, justAdded){
+  const smsHref = buildInviteSmsHref(name);
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.id = 'inviteBackdrop';
+  backdrop.innerHTML = `
+    <div class="modal-sheet">
+      <h3>${justAdded ? escapeHtml(name) + ' added to your plan ✓' : 'Text ' + escapeHtml(name) + ' the Kin-Nect link'}</h3>
+      <p>This opens your Messages app with a link to Kin-Nect already filled in — just pick who to send it to.</p>
+      <a class="cta-btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box;" href="${smsHref}">💬 Send text invite</a>
+      <p class="age-hint" style="margin-top:14px;">Heads up: opening that link gives them their own fresh Kin-Nect on their phone — it won't show your saved dashboard yet. Automatic syncing (so they see the same plan as you, live) needs real shared accounts, which isn't built yet.</p>
+      <div class="modal-actions" style="margin-top:4px;">
+        <button class="btn-modal-cancel" style="flex:1;" onclick="document.getElementById('inviteBackdrop').remove()">Got it</button>
+      </div>
+    </div>`;
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) backdrop.remove(); });
+  document.body.appendChild(backdrop);
+}
+function removeFamilyMember(memberId){
+  familyMembers = familyMembers.filter(m => m.id !== memberId);
+  saveFamilyMembers();
+  showToast('Removed');
+  renderScreen('family');
+}
+function settingsBodyHTML(){
+  return `
+    <h2 class="screen-title">Settings</h2>
+    <p class="screen-sub">Prototype settings — nothing here is wired up to real accounts yet.</p>
+    <div class="instr-card">
+      <div class="instr-head"><span class="icon">🌙</span>Appearance</div>
+      <div class="theme-toggle-row">
+        <span>Dark mode</span>
+        <button class="theme-switch ${theme==='dark'?'on':''}" onclick="toggleTheme()" aria-label="Toggle dark mode"><span class="knob"></span></button>
+      </div>
+    </div>
+    <div class="instr-card">
+      <div class="instr-head"><span class="icon">🔎</span>Text scanning</div>
+      <div class="theme-toggle-row">
+        <span>Read text from photos</span>
+        <button class="theme-switch ${isOcrEnabled()?'on':''}" onclick="toggleOcr()" aria-label="Toggle text scanning"><span class="knob"></span></button>
+      </div>
+      <p class="age-hint" style="margin:10px 0 0;">${getOcrSpaceKey()
+        ? 'Currently using <strong>OCR.space</strong> (free tier) for sharper reads on real photos — glare, small print, and colored label text. Photos are sent to OCR.space\'s servers to be read, then discarded per their policy.'
+        : 'Currently using free, on-device scanning (Tesseract.js) — nothing ever leaves your phone. It reads raw text; it can\'t intelligently structure a dosing chart, so use ✎ Edit to tidy up fields.'}</p>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--hairline, rgba(0,0,0,0.08));">
+        <div class="instr-row"><span class="k">Better scanning (still free)</span></div>
+        <p class="age-hint" style="margin:6px 0 10px;">For much better real-world accuracy — like reading a glossy OTC box — get a free OCR.space API key (no credit card, 30 seconds) and paste it below. Leave it blank to keep everything on-device.</p>
+        <input id="ocrSpaceKeyInput" type="text" placeholder="Paste your free OCR.space API key" value="${escapeHtml(getOcrSpaceKey())}" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid var(--hairline, rgba(0,0,0,0.15));font-size:14px;margin-bottom:8px;" />
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn-modal-save" style="flex:1;min-width:120px;" onclick="saveOcrSpaceKeyFromInput()">Save key</button>
+          ${getOcrSpaceKey() ? `<button class="btn-modal-cancel" style="flex:1;min-width:120px;color:var(--critical);" onclick="clearOcrSpaceKey()">Remove key</button>` : ''}
+        </div>
+        <p class="age-hint" style="margin:10px 0 0;"><a href="https://ocr.space/ocrapi/freekey" target="_blank" rel="noopener">Get a free OCR.space key →</a> (25,000 free reads/month)</p>
+      </div>
+    </div>
+    <div class="instr-card">
+      <div class="instr-head"><span class="icon">🔔</span>Reminders</div>
+      <div class="theme-toggle-row">
+        <span>On-device push reminders</span>
+        <button class="theme-switch ${isRemindersEnabled()?'on':''}" onclick="toggleReminders()" aria-label="Toggle on-device reminders"><span class="knob"></span></button>
+      </div>
+      <p class="age-hint" style="margin:10px 0 0;">${isRemindersEnabled()
+        ? 'On — while Kin-Nect is open (or was recently open) on this phone, it will buzz you right when a scheduled dose is due, for anyone in Family &amp; sharing with push turned on.'
+        : 'Off. When on, this phone gets a notification right at each scheduled dose time — but only while Kin-Nect is open or was recently open here. A guaranteed reminder even with the app fully closed needs real server-sent push, which is the next build phase, not something a prototype like this can do on its own.'}</p>
+      <p class="age-hint" style="margin:10px 0 0;">Prefer calendar reminders instead (or as a backup)? Tap 📅 on any medicine or appointment to download a .ics file for Outlook, Gmail, or Apple Calendar — that works across every device today, no setup here required.</p>
+      <p class="age-hint" style="margin:10px 0 0;">Manage who gets which kind of reminder in <a href="#" onclick="goTo('family'); return false;">Family &amp; sharing</a>.</p>
+    </div>
+    <div class="instr-card"><div class="instr-head"><span class="icon">🔒</span>Privacy</div><div class="instr-row"><span class="k">Data storage</span><span class="v">This device only</span></div></div>
+    <div class="instr-card"><div class="instr-head"><span class="icon">↺</span>Demo data</div><div class="instr-row"><span class="k">Reset the app</span><span class="v" style="color:var(--critical);cursor:pointer;" onclick="resetApp()">Clear everything</span></div></div>
+    <p style="text-align:center;font-size:11px;color:var(--ink-muted);margin-top:22px;">Build ${window.KINNECT_BUILD}</p>
+  `;
+}
+function resetApp(){
+  documents = [];
+  confirmedItems = [];
+  verifyItems = [];
+  verifyIdx = 0;
+  pageCount = 0;
+  try{ localStorage.removeItem('kinnect-confirmed-items'); }catch(e){}
+  showToast('↺ Demo data cleared');
+  goTo('upload');
+}
+
+// ---------- app shell renderer ----------
+function bottomNavHTML(active){
+  return `
+    <div class="bottomnav">
+      ${NAV_TABS.map(t => `
+        <button class="navitem ${active===t.key?'active':''}" onclick="goTo('${t.key}')">
+          <svg viewBox="0 0 24 24" fill="${active===t.key?'var(--blue)':'none'}" stroke="${active===t.key?'var(--blue)':'var(--ink-muted)'}">${NAV_ICONS[t.key]}</svg>
+          ${t.label}
+        </button>
+      `).join('')}
+    </div>`;
+}
+
+function renderScreen(name){
+  const showNav = ['upload','dashboard','family','settings'].includes(name);
+  const activeNavKey = name === 'parse' || name === 'verify' ? 'upload' : name;
+
+  let bodyHTML = '';
+  let footerHTML = '';
+
+  if(name === 'upload'){
+    bodyHTML = `
+      <h2 class="screen-title">New discharge packet</h2>
+      <p class="screen-sub">Scan medicine bottles and discharge papers — Kin-Nect reads both and builds the dashboard, no portal login needed.</p>
+      <svg class="upload-hero" viewBox="0 0 320 150" role="img" aria-label="Illustration of a phone scanning a medicine bottle">
+        <circle cx="70" cy="42" r="62" fill="var(--blue-soft)" opacity="0.7"/>
+        <circle cx="252" cy="112" r="72" fill="var(--surface-2)" opacity="0.8"/>
+        <g transform="translate(188,38)">
+          <rect x="0" y="14" width="46" height="72" rx="10" fill="var(--surface-1)" stroke="var(--gridline)" stroke-width="2"/>
+          <rect x="10" y="0" width="26" height="18" rx="6" fill="var(--aqua)"/>
+          <rect x="6" y="34" width="34" height="8" rx="3" fill="var(--blue-soft)"/>
+          <rect x="6" y="48" width="34" height="6" rx="3" fill="var(--gridline)"/>
+          <rect x="6" y="60" width="24" height="6" rx="3" fill="var(--gridline)"/>
+        </g>
+        <g transform="translate(58,14) rotate(-6)">
+          <rect x="0" y="0" width="90" height="130" rx="18" fill="var(--surface-1)" stroke="var(--blue)" stroke-width="3"/>
+          <rect x="8" y="14" width="74" height="94" rx="8" fill="var(--blue-soft)"/>
+          <circle cx="45" cy="120" r="4" fill="var(--blue)"/>
+          <rect x="8" y="55" width="74" height="4" rx="2" fill="var(--blue)" opacity="0.85"/>
+        </g>
+        <g transform="translate(150,96)">
+          <circle cx="16" cy="16" r="16" fill="var(--good)"/>
+          <path d="M9 16l5 5 9-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <g transform="translate(257,24)" fill="var(--aqua)">
+          <path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>
+        </g>
+      </svg>
+      <div class="upload-actions">
+        <button class="scan-card bottle" onclick="triggerScan('bottle')">
+          <span class="icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="8" y="3" width="8" height="18" rx="2.5" stroke="#184f95" stroke-width="1.7"/><path d="M8 8h8" stroke="#184f95" stroke-width="1.7"/><rect x="9.5" y="1.5" width="5" height="3" rx="1" fill="#184f95"/></svg>
+          </span>
+          <span class="scan-label">Scan Medicine<br/>Bottle</span>
+          <span class="scan-sub">Rx label</span>
+        </button>
+        <button class="scan-card discharge" onclick="triggerScan('discharge')">
+          <span class="icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 3h9l3 3v15a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="#0f7a53" stroke-width="1.6"/><path d="M9 11h6M9 15h6M9 7h3" stroke="#0f7a53" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <span class="scan-label">Scan Discharge<br/>Papers</span>
+          <span class="scan-sub">Care instructions</span>
+        </button>
+        <button class="scan-card otc" onclick="triggerScan('otc')">
+          <span class="icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="8" width="16" height="12" rx="1.5" stroke="#a34f10" stroke-width="1.6"/><path d="M4 8l3-4h10l3 4" stroke="#a34f10" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8v3M15 8v3" stroke="#a34f10" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <span class="scan-label">Scan OTC<br/>Medicine</span>
+          <span class="scan-sub">Front + directions</span>
+        </button>
+        <button class="scan-card list" onclick="triggerScan('list')">
+          <span class="icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18H6z" stroke="#6a4fa0" stroke-width="1.6"/><path d="M9 8h6M9 12h6M9 16h3" stroke="#6a4fa0" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <span class="scan-label">Scan a List<br/>of Instructions</span>
+          <span class="scan-sub">Handwritten notes</span>
+        </button>
+      </div>
+      <button class="cta-btn ghost" style="margin-bottom:14px;" onclick="openManualEntryModal('dashboard')">⌨️ Enter an item manually instead</button>
+      <div class="thumb-grid" id="thumbGrid"></div>
+    `;
+    footerHTML = `<div class="cta-bar" id="uploadCtaBar" style="display:${documents.length>0?'block':'none'};"><button class="cta-btn" id="processBtn" onclick="startProcessing();">Process ${documents.length} page${documents.length>1?'s':''} with AI →</button></div>`;
+  } else if(name === 'parse'){
+    bodyHTML = `
+      <div class="parse-wrap">
+        <div class="ring" id="ring" style="--pct:0"><div class="ring-inner" id="ringPct">0%</div></div>
+        <div class="steplist" id="stepList"></div>
+      </div>
+    `;
+    footerHTML = `<div class="cta-bar"><button class="cta-btn ghost" id="parseContinue" style="display:none;" onclick="goTo('verify'); verifyIdx=0; renderVerifyStep();">Continue to Verification →</button></div>`;
+  } else if(name === 'verify'){
+    bodyHTML = `
+      <h2 class="screen-title">Confirm each item</h2>
+      <p class="screen-sub">Nothing reaches the family dashboard until you confirm it's correct.</p>
+      <div class="verify-progress"><span id="vp-label"></span><span id="vp-count"></span></div>
+      <div class="bar-track"><div class="bar-fill" id="vp-bar"></div></div>
+      <div class="doc-card"><span class="label">Original document — page snippet</span><span id="vp-snippet"></span></div>
+      <div class="extract-card">
+        <div class="label"><span>Kin-Nect extracted</span><span class="confbadge" id="vp-conf"></span></div>
+        <div id="vp-fields"></div>
+        <p class="age-hint" id="vp-ocr-note" style="display:none;margin:10px 0 0;color:var(--warning);"></p>
+      </div>
+      <div class="extract-card">
+        <div class="label"><span>Who's this for?</span></div>
+        <select id="vp-forwhom" class="fam-select" onchange="setVerifyForWhom(this.value)"></select>
+      </div>
+      <div class="extract-card" id="vp-age-card" style="display:none;">
+        <div class="label"><span id="vp-age-card-title">Which age range applies?</span></div>
+        <p class="age-hint" id="vp-age-card-hint"></p>
+        <div id="vp-age-body"></div>
+      </div>
+      <div class="extract-card" id="vp-schedule-card" style="display:none;">
+        <div class="label"><span>When is this taken?</span></div>
+        <p class="age-hint">Set it now so the dashboard is right from the start — defaults to today, ongoing, so you can just tap through if that's fine.</p>
+        <div class="edit-row">
+          <label>Frequency (label shown on the dashboard)</label>
+          <input type="text" id="vp-schedule-freq" placeholder="e.g. Twice daily" />
+        </div>
+        <div id="vp-schedule-body"></div>
+      </div>
+      <div class="verify-actions">
+        <button class="btn-confirm" onclick="confirmVerify()">✓ Looks right</button>
+        <button class="btn-edit" onclick="openEditModal()">✎ Edit</button>
+      </div>
+    `;
+  } else if(name === 'listreview'){
+    bodyHTML = `<div id="listReviewBody">${listReviewBodyHTML()}</div>`;
+  } else if(name === 'dashboard'){
+    bodyHTML = dashboardBodyHTML();
+  } else if(name === 'family'){
+    bodyHTML = familyBodyHTML();
+  } else if(name === 'settings'){
+    bodyHTML = settingsBodyHTML();
+  }
+
+  const appEl = document.getElementById('app');
+  appEl.innerHTML = `
+    <div class="app-header">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="12" r="4" fill="#2a78d6"/><circle cx="17" cy="12" r="4" fill="#1baf7a"/><path d="M10.5 12h3" stroke="#0b0b0b" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Kin-Nect
+      </div>
+      <div class="header-right">
+        <button class="theme-header-btn" onclick="toggleTheme()" aria-label="Toggle dark mode">${theme === 'dark'
+          ? '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="var(--ink-1)" stroke-width="1.8"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8" stroke="var(--ink-1)" stroke-width="1.6" stroke-linecap="round"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8.5 8.5 0 0110.2 4a8.5 8.5 0 109.8 10.5z" stroke="var(--ink-1)" stroke-width="1.7" stroke-linejoin="round"/></svg>'
+        }</button>
+        <div class="avatar-mini">C</div>
+      </div>
+    </div>
+    <div class="app-body">${bodyHTML}</div>
+    ${footerHTML}
+    ${showNav ? bottomNavHTML(activeNavKey) : ''}
+  `;
+
+  if(name==='upload'){ renderThumbGrid(); }
+  if(name==='verify'){ renderVerifyStep(); }
+}
+
+// ---------- dark mode ----------
+// Defaults to the phone's system setting, then remembers whatever the
+// person picks in Settings (stored locally on their device only).
+let theme = 'light';
+try{
+  const saved = localStorage.getItem('kinnect-theme');
+  theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+}catch(e){ /* localStorage unavailable — fall back to light */ }
+function applyTheme(t){
+  theme = t;
+  document.documentElement.setAttribute('data-theme', t);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', t === 'dark' ? '#1c1c1e' : '#fcfcfb');
+  try{ localStorage.setItem('kinnect-theme', t); }catch(e){}
+}
+function toggleTheme(){
+  applyTheme(theme === 'dark' ? 'light' : 'dark');
+  renderScreen(currentScreen);
+}
+applyTheme(theme);
+
+// init
+renderScreen('upload');
+if(isRemindersEnabled()){
+  registerServiceWorker().then(()=> startReminderLoop());
+}
+</script>
+</body>
+</html>
